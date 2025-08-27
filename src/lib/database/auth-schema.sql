@@ -260,10 +260,53 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Dashboard Widgets for Dynamic Dashboards
+CREATE TABLE IF NOT EXISTS dashboard_widgets (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    tenant_id UUID REFERENCES tenants(id) ON DELETE CASCADE,
+    widget_type VARCHAR(100) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    position JSONB NOT NULL, -- {x: number, y: number}
+    size JSONB NOT NULL, -- {width: number, height: number}
+    configuration JSONB DEFAULT '{}'::jsonb,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for dashboard widgets
+CREATE INDEX IF NOT EXISTS idx_dashboard_widgets_tenant_id ON dashboard_widgets(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_dashboard_widgets_type ON dashboard_widgets(widget_type);
+
+-- RLS for dashboard widgets
+ALTER TABLE dashboard_widgets ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can view widgets for their tenant" ON dashboard_widgets
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM user_profiles 
+            WHERE id = auth.uid() AND tenant_id = dashboard_widgets.tenant_id
+        )
+    );
+
+CREATE POLICY "Admins can manage widgets for their tenant" ON dashboard_widgets
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM user_profiles up
+            WHERE up.id = auth.uid() 
+            AND up.role IN ('SUPERADMIN', 'ADMIN') 
+            AND (up.role = 'SUPERADMIN' OR up.tenant_id = dashboard_widgets.tenant_id)
+        )
+    );
+
 -- Audit triggers
 CREATE TRIGGER audit_user_profiles
     AFTER INSERT OR UPDATE OR DELETE ON user_profiles
     FOR EACH ROW EXECUTE FUNCTION create_audit_log();
+
+CREATE TRIGGER update_dashboard_widgets_updated_at 
+    BEFORE UPDATE ON dashboard_widgets 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Insert default superadmin tenant
 INSERT INTO tenants (id, name, domain, subscription_plan, is_active) 

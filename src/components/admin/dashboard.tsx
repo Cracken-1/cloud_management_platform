@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   ChartBarIcon, 
   CurrencyDollarIcon, 
@@ -10,6 +11,9 @@ import {
   ExclamationTriangleIcon,
   ArrowUpIcon
 } from '@heroicons/react/24/outline';
+import { useAuth } from '@/lib/auth/auth-context';
+import { tenantService } from '@/lib/tenant/tenant-service';
+import DynamicDashboard from '@/components/admin/dynamic-dashboard';
 
 interface DashboardStats {
   totalRevenue: number;
@@ -57,10 +61,44 @@ export default function AdminDashboard() {
   const [inventoryAlerts, setInventoryAlerts] = useState<InventoryAlert[]>([]);
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tenantConfig, setTenantConfig] = useState<any>(null);
+  const [needsSetup, setNeedsSetup] = useState(false);
+
+  const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    loadDashboardData();
-  }, []);
+    checkTenantSetup();
+  }, [user]);
+
+  const checkTenantSetup = async () => {
+    if (!user) return;
+
+    try {
+      // Check if user has a tenant configured
+      const userProfile = await fetch('/api/user/profile').then(res => res.json());
+      
+      if (!userProfile.tenant_id) {
+        setNeedsSetup(true);
+        setLoading(false);
+        return;
+      }
+
+      // Load tenant configuration
+      const config = await tenantService.getTenantConfiguration(userProfile.tenant_id);
+      if (config) {
+        setTenantConfig(config);
+        loadDashboardData();
+      } else {
+        setNeedsSetup(true);
+      }
+    } catch (error) {
+      console.error('Failed to check tenant setup:', error);
+      setNeedsSetup(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadDashboardData = async () => {
     try {
@@ -175,6 +213,33 @@ export default function AdminDashboard() {
     );
   }
 
+  if (needsSetup) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Welcome to Cloud Management Platform
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Let&apos;s set up your personalized dashboard by analyzing your company website.
+          </p>
+          <button
+            onClick={() => router.push('/admin/setup')}
+            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Start Setup
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // If tenant is configured, show dynamic dashboard
+  if (tenantConfig) {
+    return <DynamicDashboard tenantId={tenantConfig.id} />;
+  }
+
+  // Fallback to original PandaMart dashboard
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
