@@ -247,6 +247,45 @@ export class MPesaService {
     }
   }
 
+  async processPayment(amount: number, phoneNumber: string, tenantId: string): Promise<Record<string, unknown>> {
+    const accessToken = await this.getAccessToken();
+
+    const payload = {
+      InitiatorName: 'testapi', // This should be configured
+      SecurityCredential: 'encrypted_credential', // This needs proper encryption
+      CommandID: 'CustomerPayBillOnline',
+      Amount: amount,
+      PartyA: this.formatPhoneNumber(phoneNumber),
+      PartyB: this.config.businessShortCode,
+      Remarks: 'Payment processing',
+      QueueTimeOutURL: `${this.config.callbackUrl}/payment/timeout`,
+      ResultURL: `${this.config.callbackUrl}/payment/result`,
+      Occasion: 'Payment'
+    };
+
+    const response = await fetch(`${this.baseUrl}/mpesa/stkpush/v1/processrequest`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.ResponseCode !== '0') {
+      throw new Error(data.ResponseDescription || 'Payment failed');
+    }
+
+    return {
+      CheckoutRequestID: data.CheckoutRequestID,
+      CustomerMessage: data.CustomerMessage,
+      ResponseCode: data.ResponseCode,
+      ResponseDescription: data.ResponseDescription
+    };
+  }
+
   async processBulkPayments(request: BulkPaymentRequest, _tenantId: string): Promise<Record<string, unknown>> {
     const accessToken = await this.getAccessToken();
 
@@ -333,6 +372,24 @@ export class MPesaService {
     } else {
       return 'Good time for transaction';
     }
+  }
+
+  private calculateTransactionFee(amount: number): number {
+    if (amount <= 100) return 0;
+    if (amount <= 500) return 7;
+    if (amount <= 1000) return 13;
+    if (amount <= 1500) return 23;
+    if (amount <= 2500) return 33;
+    if (amount <= 3500) return 53;
+    if (amount <= 5000) return 57;
+    if (amount <= 7500) return 78;
+    if (amount <= 10000) return 90;
+    if (amount <= 15000) return 108;
+    if (amount <= 20000) return 115;
+    if (amount <= 35000) return 167;
+    if (amount <= 50000) return 185;
+    if (amount <= 150000) return 197;
+    return 300; // Above 150,000
   }
 }
 

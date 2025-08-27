@@ -188,16 +188,17 @@ export class WebsiteAnalyzer {
   }
 
   private getDefaultAnalysis(_url: string): WebsiteAnalysis {
+    const name = 'Generic Business';
     return {
-      companyName: 'Your Company',
+      companyName: name,
       industry: 'generic',
-      services: ['Business Management', 'Analytics', 'Reporting'],
+      services: [name, 'Management', 'Analytics', 'Reporting'],
       colors: {
         primary: '#374151',
         secondary: '#6B7280',
         accent: '#10B981'
       },
-      description: 'Business management platform',
+      description: `${name} - Business management platform`,
       keywords: ['business', 'management'],
       socialMedia: {},
       contact: {}

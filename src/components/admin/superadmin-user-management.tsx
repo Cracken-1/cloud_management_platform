@@ -1,12 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
+import {
   PlusIcon,
+  PencilIcon,
   TrashIcon,
+  CheckIcon,
+  XMarkIcon,
+  UserIcon,
+  EyeIcon,
+  EyeSlashIcon,
   CheckCircleIcon,
-  XCircleIcon,
-  EnvelopeIcon
+  XCircleIcon
 } from '@heroicons/react/24/outline';
 
 interface AdminUser {
@@ -66,27 +71,21 @@ export default function SuperadminUserManagement() {
     try {
       const response = await fetch('/api/superadmin/users', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newAdmin),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...newAdmin, send_invitation: true })
       });
 
       if (response.ok) {
         const result = await response.json();
-        setUsers(prev => [...prev, result.user]);
-        setNewAdmin({
-          email: '',
-          full_name: '',
-          role: 'ADMIN',
-          send_invitation: true
-        });
+        setUsers([...users, result.user]);
         setShowAddForm(false);
+        setNewAdmin({ email: '', full_name: '', role: 'ADMIN', send_invitation: true });
+        alert('User created successfully!');
       } else {
         const error = await response.json();
-        alert(error.error || 'Failed to add admin');
+        alert(`Error: ${error.error}`);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to add admin:', error);
       alert('Failed to add admin');
     } finally {

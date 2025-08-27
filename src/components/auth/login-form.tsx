@@ -62,7 +62,7 @@ export default function LoginForm() {
   const [showDemoOptions, setShowDemoOptions] = useState(false);
   const [requiresVerification, setRequiresVerification] = useState(false);
   
-  const router = useRouter();
+  // const router = useRouter(); // Commented out as not used
   const searchParams = useSearchParams();
 
   useEffect(() => {

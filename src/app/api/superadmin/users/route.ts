@@ -29,7 +29,7 @@ export async function GET() {
 
     const formattedUsers = users.map(user => ({
       ...user,
-      tenant_name: (user.tenants as any)?.name || null,
+      tenant_name: Array.isArray(user.tenants) ? user.tenants[0]?.name || null : (user.tenants as { name: string } | null)?.name || null,
       tenants: undefined
     }));
 

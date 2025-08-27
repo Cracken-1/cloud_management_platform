@@ -61,13 +61,13 @@ export default function AdminDashboard() {
   const [inventoryAlerts, setInventoryAlerts] = useState<InventoryAlert[]>([]);
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tenantConfig, setTenantConfig] = useState<any>(null);
+  const [tenantConfig, setTenantConfig] = useState<Record<string, unknown> | null>(null);
   const [needsSetup, setNeedsSetup] = useState(false);
 
   const { user } = useAuth();
   const router = useRouter();
 
-  const checkTenantSetup = async (user: { id: string; role: string }) => {
+  const checkTenantSetup = async () => {
     if (!user) return;
 
     try {
@@ -76,19 +76,17 @@ export default function AdminDashboard() {
       
       if (!userProfile.tenant_id) {
         setNeedsSetup(true);
-        setLoading(false);
-        return;
-      }
-
-      // Load tenant configuration
-      const config = await tenantService.getTenantConfiguration(userProfile.tenant_id);
-      if (config) {
-        setTenantConfig(config);
-        loadDashboardData();
       } else {
-        setNeedsSetup(true);
+        const response = await fetch('/api/tenant/config');
+        if (response.ok) {
+          const data = await response.json();
+          const tenantName = (tenantConfig?.companyName as string) || 'Your Company';
+          if (data.config) {
+            setTenantConfig(data.config);
+          }
+        }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to check tenant setup:', error);
       setNeedsSetup(true);
     } finally {
@@ -97,8 +95,12 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
+    checkTenantSetup();
+  }, [checkTenantSetup]);
+
+  useEffect(() => {
     if (user) {
-      checkTenantSetup(user);
+      checkTenantSetup();
     }
   }, [user]);
 
@@ -238,7 +240,7 @@ export default function AdminDashboard() {
 
   // If tenant is configured, show dynamic dashboard
   if (tenantConfig) {
-    return <DynamicDashboard tenantId={tenantConfig.id} />;
+    return <DynamicDashboard tenantId={tenantConfig.id as string} />;
   }
 
   // Fallback to original PandaMart dashboard

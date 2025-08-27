@@ -25,7 +25,7 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
 
   useEffect(() => {
     loadTenantConfig();
-  }, [tenantId]);
+  }, [tenantId, loadTenantConfig]);
 
   if (loading) {
     return (
@@ -99,7 +99,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
               description="Track and manage your inventory in real-time"
               icon="📦"
               color={config.branding.primaryColor}
-              href="/admin/inventory"
             />
           )}
           
@@ -109,7 +108,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
               description="Get insights into your business performance"
               icon="📊"
               color={config.branding.secondaryColor}
-              href="/admin/analytics"
             />
           )}
           
@@ -119,7 +117,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
               description="Handle payments and financial transactions"
               icon="💳"
               color={config.branding.accentColor}
-              href="/admin/payments"
             />
           )}
           
@@ -129,7 +126,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
               description="Manage customer relationships and data"
               icon="👥"
               color={config.branding.primaryColor}
-              href="/admin/customers"
             />
           )}
           
@@ -139,7 +135,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
               description="Manage your online store and products"
               icon="🛒"
               color={config.branding.secondaryColor}
-              href="/admin/ecommerce"
             />
           )}
           
@@ -149,7 +144,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
               description="Track and optimize delivery operations"
               icon="🚚"
               color={config.branding.accentColor}
-              href="/admin/delivery"
             />
           )}
         </div>
@@ -169,10 +163,9 @@ interface FeatureCardProps {
   description: string;
   icon: string;
   color: string;
-  href: string;
 }
 
-function FeatureCard({ title, description, icon, color, href }: FeatureCardProps) {
+function FeatureCard({ title, description, icon, color }: FeatureCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer">
       <div className="flex items-center mb-4">

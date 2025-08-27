@@ -1,6 +1,6 @@
 // Tenant Management Service
 import { supabaseAdmin } from '../database/supabase';
-import { websiteAnalyzer, type TenantConfiguration, type WebsiteAnalysis } from './website-analyzer';
+import { WebsiteAnalyzer, TenantConfiguration } from './website-analyzer';
 
 export interface TenantSetupRequest {
   adminUserId: string;
@@ -21,11 +21,12 @@ export class TenantService {
   async setupTenant(request: TenantSetupRequest): Promise<TenantSetupResult> {
     try {
       // 1. Analyze the website
-      const analysis = await websiteAnalyzer.analyzeWebsite(request.websiteUrl);
+      const analyzer = new WebsiteAnalyzer();
+      const analysis = await analyzer.analyzeWebsite(request.websiteUrl);
       
       // 2. Generate tenant configuration
       const domain = this.generateTenantDomain(request.companyName);
-      const config = websiteAnalyzer.generateTenantConfig(analysis, domain);
+      const config = analyzer.generateTenantConfig(analysis, domain);
       
       // 3. Create tenant in database
       const { data: tenant, error: tenantError } = await supabaseAdmin
@@ -315,8 +316,9 @@ export class TenantService {
     ];
 
     for (const company of mockCompanies) {
-      const analysis = await websiteAnalyzer.analyzeWebsite(company.websiteUrl);
-      const config = websiteAnalyzer.generateTenantConfig(analysis, company.domain);
+      const analyzer = new WebsiteAnalyzer();
+      const analysis = await analyzer.analyzeWebsite(company.websiteUrl);
+      const config = analyzer.generateTenantConfig(analysis, company.domain);
 
       await supabaseAdmin
         .from('tenants')

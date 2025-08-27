@@ -28,12 +28,24 @@ export interface PricingRecommendation {
   };
 }
 
+export interface PricingAnalysisData {
+  productId: string;
+  currentPrice: number;
+  costPrice: number;
+  competitorPrices: number[];
+  demandScore: number; // 0-1 scale
+  inventoryLevel: number;
+  salesVelocity: number; // units per day
+  seasonalFactor: number;
+  marketPosition: 'PREMIUM' | 'COMPETITIVE' | 'BUDGET';
+}
+
 export class DynamicPricingEngine {
   private readonly MIN_MARGIN = 0.15; // 15% minimum margin
   private readonly MAX_PRICE_CHANGE = 0.20; // 20% max price change per adjustment
   private readonly KENYA_VAT_RATE = 0.16; // 16% VAT in Kenya
 
-  async calculateOptimalPrice(data: PricingData): Promise<PricingRecommendation> {
+  async generatePricingRecommendations(data: PricingAnalysisData): Promise<PricingRecommendation[]> {
     const reasoning: string[] = [];
     let recommendedPrice = data.currentPrice;
 
@@ -100,7 +112,7 @@ export class DynamicPricingEngine {
     // Calculate confidence score
     const confidence = this.calculateConfidence(data, reasoning.length);
 
-    return {
+    return [{
       productId: data.productId,
       currentPrice: data.currentPrice,
       recommendedPrice,
@@ -109,7 +121,24 @@ export class DynamicPricingEngine {
       reasoning,
       confidence,
       expectedImpact
+    }];
+  }
+
+  async calculateOptimalPrice(data: PricingData): Promise<PricingRecommendation> {
+    const analysisData: PricingAnalysisData = {
+      productId: data.productId,
+      currentPrice: data.currentPrice,
+      costPrice: data.costPrice,
+      competitorPrices: data.competitorPrices,
+      demandScore: data.demandScore,
+      inventoryLevel: data.inventoryLevel,
+      salesVelocity: data.salesVelocity,
+      seasonalFactor: data.seasonalFactor,
+      marketPosition: data.marketPosition
     };
+    
+    const recommendations = await this.generatePricingRecommendations(analysisData);
+    return recommendations[0];
   }
 
   private calculateMinPrice(costPrice: number): number {
@@ -307,15 +336,15 @@ export class DynamicPricingEngine {
     tenantId: string
   ): Promise<PricingRecommendation[]> {
     const recommendations = await Promise.all(
-      products.map(product => this.calculateOptimalPrice(product))
+      products.map(product => this.generatePricingRecommendations(product))
     );
 
     // Save recommendations
     await Promise.all(
-      recommendations.map(rec => this.savePricingRecommendation(rec, tenantId))
+      recommendations.flat().map((rec: PricingRecommendation) => this.savePricingRecommendation(rec, tenantId))
     );
 
-    return recommendations;
+    return recommendations.flat();
   }
 }
 

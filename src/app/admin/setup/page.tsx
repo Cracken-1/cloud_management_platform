@@ -32,7 +32,7 @@ export default function TenantSetupPage() {
   const { user } = useAuth();
   const router = useRouter();
 
-  const handleAnalyze = async (data: { companyName: string; website: string; industry?: string }) => {
+  const handleAnalyze = async () => {
     if (!formData.websiteUrl) return;
     
     setAnalyzing(true);
@@ -165,7 +165,7 @@ export default function TenantSetupPage() {
                   />
                   <button
                     type="button"
-                    onClick={() => handleAnalyze({ companyName: formData.companyName, website: formData.websiteUrl, industry: formData.industry })}
+                    onClick={() => handleAnalyze()}
                     disabled={!formData.websiteUrl || analyzing}
                     className="inline-flex items-center px-4 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
                   >

@@ -37,30 +37,18 @@ interface DashboardWidget {
   title: string;
   value: string | number;
   change?: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   color: string;
 }
 
-export default function TenantDashboard({ tenantId }: { tenantId: string }) {
-  const [tenantConfig, setTenantConfig] = useState<{
-    companyName: string;
-    branding: {
-      primaryColor: string;
-      secondaryColor: string;
-      accentColor: string;
-      logo?: string;
-    };
-    industry: string;
-    features: Record<string, boolean>;
-  } | null>(null);
+interface TenantDashboardProps {
+  tenantId: string;
+}
+
+export default function TenantDashboard({ tenantId }: TenantDashboardProps) {
+  const [tenantConfig, setTenantConfig] = useState<TenantConfiguration | null>(null);
   const [widgets, setWidgets] = useState<DashboardWidget[]>([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (tenantId) {
-      fetchTenantConfig();
-    }
-  }, [tenantId]);
 
   const fetchTenantConfig = async () => {
     try {
@@ -76,6 +64,13 @@ export default function TenantDashboard({ tenantId }: { tenantId: string }) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (tenantId) {
+      fetchTenantConfig();
+    }
+  }, [tenantId, fetchTenantConfig]);
+
 
   const generateWidgets = (tenantConfig: TenantConfiguration) => {
     const baseWidgets: DashboardWidget[] = [
@@ -326,7 +321,7 @@ function getIndustrySpecificActivity(industry: string): string[] {
   }
 }
 
-function getIndustrySpecificActions(industry: string, primaryColor: string) {
+function getIndustrySpecificActions(industry: string, _primaryColor: string) {
   const baseActions = [
     { title: 'View Reports', description: 'Generate analytics' },
     { title: 'Manage Users', description: 'User administration' }

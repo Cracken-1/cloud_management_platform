@@ -314,7 +314,7 @@ export class AuthService {
       // Generate temporary password
       const tempPassword = this.generateTempPassword();
 
-      // Create the user
+      // Create user account
       const createResult = await this.createUser({
         email: request.email,
         password: tempPassword,

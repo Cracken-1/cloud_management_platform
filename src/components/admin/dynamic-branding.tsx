@@ -37,7 +37,7 @@ export default function DynamicBranding({ children, tenantId }: DynamicBrandingP
         // Apply dynamic CSS variables
         applyBrandingStyles(data.config.branding);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to fetch branding:', error);
     } finally {
       setLoading(false);
