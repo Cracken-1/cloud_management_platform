@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if tenant already exists
-    let { data: existingTenant } = await supabaseAdmin
+    const { data: existingTenant } = await supabaseAdmin
       .from('tenants')
       .select('id, name')
       .eq('name', mockCompany.name)
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if demo user exists
-    let { data: existingUser } = await supabaseAdmin
+    const { data: existingUser } = await supabaseAdmin
       .from('user_profiles')
       .select('id')
       .eq('email', email)

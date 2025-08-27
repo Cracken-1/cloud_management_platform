@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { 
-  UserPlusIcon, 
-  PencilIcon, 
+  PlusIcon,
   TrashIcon,
-  EyeIcon,
   CheckCircleIcon,
-  XCircleIcon
+  XCircleIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 
 interface AdminUser {
@@ -60,7 +59,7 @@ export default function SuperadminUserManagement() {
     }
   };
 
-  const handleAddAdmin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
 
@@ -152,7 +151,7 @@ export default function SuperadminUserManagement() {
           onClick={() => setShowAddForm(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
         >
-          <UserPlusIcon className="h-5 w-5 mr-2" />
+          <PlusIcon className="h-5 w-5 mr-2" />
           Add New Admin
         </button>
       </div>
@@ -162,7 +161,7 @@ export default function SuperadminUserManagement() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h3 className="text-lg font-semibold mb-4">Add New Admin</h3>
-            <form onSubmit={handleAddAdmin} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Email</label>
                 <input
@@ -310,7 +309,7 @@ export default function SuperadminUserManagement() {
 
         {users.length === 0 && (
           <div className="text-center py-12">
-            <UserPlusIcon className="mx-auto h-12 w-12 text-gray-400" />
+            <PlusIcon className="mx-auto h-12 w-12 text-gray-400" />
             <h3 className="mt-2 text-sm font-medium text-gray-900">No users</h3>
             <p className="mt-1 text-sm text-gray-500">Get started by adding your first admin user.</p>
           </div>

@@ -67,11 +67,7 @@ export default function AdminDashboard() {
   const { user } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    checkTenantSetup();
-  }, [user]);
-
-  const checkTenantSetup = async () => {
+  const checkTenantSetup = async (user: { id: string; role: string }) => {
     if (!user) return;
 
     try {
@@ -99,6 +95,12 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      checkTenantSetup(user);
+    }
+  }, [user]);
 
   const loadDashboardData = async () => {
     try {

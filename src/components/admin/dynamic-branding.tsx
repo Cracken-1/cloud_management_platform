@@ -20,11 +20,7 @@ export default function DynamicBranding({ children, tenantId }: DynamicBrandingP
   const [branding, setBranding] = useState<BrandingConfig | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchBranding();
-  }, [tenantId]);
-
-  const fetchBranding = async () => {
+  const fetchBranding = async (config?: { colors?: { primary: string; secondary: string; accent: string }; companyName?: string }) => {
     try {
       const response = await fetch('/api/tenant/config');
       if (response.ok) {
@@ -47,6 +43,10 @@ export default function DynamicBranding({ children, tenantId }: DynamicBrandingP
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchBranding();
+  }, [tenantId]);
 
   const applyBrandingStyles = (branding: any) => {
     const root = document.documentElement;

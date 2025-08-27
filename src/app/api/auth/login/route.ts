@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     // Handle superadmin login
     if (email === 'superadmin@cloudmanager.app' && password === 'superadmin123') {
       // Create or get superadmin user
-      let { data: existingUser } = await supabaseAdmin
+      const { data: existingUser } = await supabaseAdmin
         .from('user_profiles')
         .select('id')
         .eq('email', email)

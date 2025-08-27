@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { UserRole, hasPermission } from '@/lib/auth/roles';
 import DynamicBranding from '@/components/admin/dynamic-branding';
 import { useAuth } from '@/lib/auth/auth-context';
 import {

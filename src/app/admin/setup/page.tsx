@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { tenantService } from '@/lib/tenant/tenant-service';
 import { useAuth } from '@/lib/auth/auth-context';
 
 interface SetupFormData {
@@ -22,12 +21,18 @@ export default function TenantSetupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [analyzing, setAnalyzing] = useState(false);
-  const [preview, setPreview] = useState<any>(null);
+  const [preview, setPreview] = useState<{
+    companyName: string;
+    industry: string;
+    services: string[];
+    colors: { primary: string; secondary: string; accent: string };
+    description: string;
+  } | null>(null);
   
   const { user } = useAuth();
   const router = useRouter();
 
-  const handleAnalyzeWebsite = async () => {
+  const handleAnalyze = async (data: { companyName: string; website: string; industry?: string }) => {
     if (!formData.websiteUrl) return;
     
     setAnalyzing(true);
@@ -48,7 +53,7 @@ export default function TenantSetupPage() {
       };
       
       setPreview(mockAnalysis);
-    } catch (err) {
+    } catch {
       setError('Failed to analyze website. Please check the URL and try again.');
     } finally {
       setAnalyzing(false);
@@ -83,7 +88,7 @@ export default function TenantSetupPage() {
       } else {
         setError(result.error || 'Setup failed');
       }
-    } catch (err) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -160,7 +165,7 @@ export default function TenantSetupPage() {
                   />
                   <button
                     type="button"
-                    onClick={handleAnalyzeWebsite}
+                    onClick={() => handleAnalyze({ companyName: formData.companyName, website: formData.websiteUrl, industry: formData.industry })}
                     disabled={!formData.websiteUrl || analyzing}
                     className="inline-flex items-center px-4 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:opacity-50"
                   >

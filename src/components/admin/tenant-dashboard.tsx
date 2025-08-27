@@ -41,31 +41,43 @@ interface DashboardWidget {
   color: string;
 }
 
-export default function TenantDashboard() {
-  const [config, setConfig] = useState<TenantConfiguration | null>(null);
+export default function TenantDashboard({ tenantId }: { tenantId: string }) {
+  const [tenantConfig, setTenantConfig] = useState<{
+    companyName: string;
+    branding: {
+      primaryColor: string;
+      secondaryColor: string;
+      accentColor: string;
+      logo?: string;
+    };
+    industry: string;
+    features: Record<string, boolean>;
+  } | null>(null);
   const [widgets, setWidgets] = useState<DashboardWidget[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchTenantConfig();
-  }, []);
+    if (tenantId) {
+      fetchTenantConfig();
+    }
+  }, [tenantId]);
 
   const fetchTenantConfig = async () => {
     try {
-      const response = await fetch('/api/tenant/config');
+      const response = await fetch('/api/tenant/tenantConfig');
       if (response.ok) {
         const data = await response.json();
-        setConfig(data.config);
-        generateWidgets(data.config);
+        setTenantConfig(data.tenantConfig);
+        generateWidgets(data.tenantConfig);
       }
     } catch (error) {
-      console.error('Failed to fetch tenant config:', error);
+      console.error('Failed to fetch tenant tenantConfig:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const generateWidgets = (config: TenantConfiguration) => {
+  const generateWidgets = (tenantConfig: TenantConfiguration) => {
     const baseWidgets: DashboardWidget[] = [
       {
         id: 'revenue',
@@ -74,7 +86,7 @@ export default function TenantDashboard() {
         value: '$25,430',
         change: '+12%',
         icon: CurrencyDollarIcon,
-        color: config.branding.primaryColor
+        color: tenantConfig.branding.primaryColor
       },
       {
         id: 'users',
@@ -83,12 +95,12 @@ export default function TenantDashboard() {
         value: '1,234',
         change: '+5%',
         icon: UserGroupIcon,
-        color: config.branding.secondaryColor
+        color: tenantConfig.branding.secondaryColor
       }
     ];
 
     // Add industry-specific widgets
-    switch (config.dashboardLayout) {
+    switch (tenantConfig.dashboardLayout) {
       case 'retail':
         baseWidgets.push(
           {
@@ -98,7 +110,7 @@ export default function TenantDashboard() {
             value: '156',
             change: '+8%',
             icon: ShoppingBagIcon,
-            color: config.branding.accentColor
+            color: tenantConfig.branding.accentColor
           },
           {
             id: 'inventory',
@@ -121,7 +133,7 @@ export default function TenantDashboard() {
             value: '12',
             change: '+3',
             icon: ClipboardDocumentListIcon,
-            color: config.branding.accentColor
+            color: tenantConfig.branding.accentColor
           },
           {
             id: 'delivery',
@@ -144,7 +156,7 @@ export default function TenantDashboard() {
             value: '45',
             change: '+7',
             icon: TruckIcon,
-            color: config.branding.accentColor
+            color: tenantConfig.branding.accentColor
           },
           {
             id: 'routes',
@@ -167,7 +179,7 @@ export default function TenantDashboard() {
             value: '2,456',
             change: '+18%',
             icon: ChartBarIcon,
-            color: config.branding.accentColor
+            color: tenantConfig.branding.accentColor
           }
         );
     }
@@ -183,7 +195,7 @@ export default function TenantDashboard() {
     );
   }
 
-  if (!config) {
+  if (!tenantConfig) {
     return (
       <div className="text-center py-12">
         <h3 className="text-lg font-medium text-gray-900">Configuration Not Found</h3>
@@ -197,19 +209,19 @@ export default function TenantDashboard() {
       {/* Dynamic Header with Company Branding */}
       <div 
         className="rounded-lg p-6 text-white"
-        style={{ backgroundColor: config.branding.primaryColor }}
+        style={{ backgroundColor: tenantConfig.branding.primaryColor }}
       >
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">{config.companyName} Dashboard</h1>
+            <h1 className="text-2xl font-bold">{tenantConfig.companyName} Dashboard</h1>
             <p className="text-sm opacity-90 capitalize">
-              {config.industry} Management Platform
+              {tenantConfig.industry} Management Platform
             </p>
           </div>
-          {config.branding.logo && (
+          {tenantConfig.branding.logo && (
             <img 
-              src={config.branding.logo} 
-              alt={`${config.companyName} Logo`}
+              src={tenantConfig.branding.logo} 
+              alt={`${tenantConfig.companyName} Logo`}
               className="h-12 w-12 rounded"
             />
           )}
@@ -249,11 +261,11 @@ export default function TenantDashboard() {
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
           <div className="space-y-3">
-            {getIndustrySpecificActivity(config.industry).map((activity, index) => (
+            {getIndustrySpecificActivity(tenantConfig.industry).map((activity, index) => (
               <div key={index} className="flex items-center space-x-3">
                 <div 
                   className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: config.branding.accentColor }}
+                  style={{ backgroundColor: tenantConfig.branding.accentColor }}
                 />
                 <span className="text-sm text-gray-600">{activity}</span>
               </div>
@@ -264,11 +276,11 @@ export default function TenantDashboard() {
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 gap-3">
-            {getIndustrySpecificActions(config.industry, config.branding.primaryColor).map((action, index) => (
+            {getIndustrySpecificActions(tenantConfig.industry, tenantConfig.branding.primaryColor).map((action, index) => (
               <button
                 key={index}
                 className="p-3 text-left rounded-lg border-2 border-gray-200 hover:border-current transition-colors"
-                style={{ borderColor: `${config.branding.primaryColor}40` }}
+                style={{ borderColor: `${tenantConfig.branding.primaryColor}40` }}
               >
                 <div className="text-sm font-medium text-gray-900">{action.title}</div>
                 <div className="text-xs text-gray-500">{action.description}</div>

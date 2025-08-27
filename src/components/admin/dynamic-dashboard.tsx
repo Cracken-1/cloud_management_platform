@@ -12,10 +12,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
   const [config, setConfig] = useState<TenantConfiguration | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadTenantConfig();
-  }, [tenantId]);
-
   const loadTenantConfig = async () => {
     try {
       const tenantConfig = await tenantService.getTenantConfiguration(tenantId);
@@ -26,6 +22,10 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadTenantConfig();
+  }, [tenantId]);
 
   if (loading) {
     return (
@@ -58,7 +58,8 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
               {config.branding.logo && (
-                <img 
+                <img
+              // eslint-disable-next-line @next/next/no-img-element 
                   src={config.branding.logo} 
                   alt={`${config.companyName} Logo`}
                   className="h-8 w-auto mr-3"
@@ -86,7 +87,7 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
             Welcome to {config.companyName}
           </h2>
           <p className="text-gray-600">
-            {config.customization.description || 'Manage your business operations efficiently'}
+{config.customization?.description || 'Manage your business operations efficiently'}
           </p>
         </div>
 

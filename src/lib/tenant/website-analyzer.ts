@@ -1,5 +1,4 @@
 // Website Analysis Service for Dynamic Tenant Configuration
-import { load } from 'cheerio';
 
 export interface WebsiteAnalysis {
   companyName: string;
@@ -48,7 +47,10 @@ export interface TenantConfiguration {
   };
   industry: string;
   dashboardLayout: 'retail' | 'restaurant' | 'logistics' | 'generic';
-  customization: Record<string, unknown>;
+  customization: {
+    description?: string;
+    [key: string]: unknown;
+  };
 }
 
 export class WebsiteAnalyzer {
@@ -63,7 +65,7 @@ export class WebsiteAnalyzer {
     agriculture: ['farm', 'agriculture', 'crop', 'livestock', 'organic', 'produce']
   };
 
-  async analyzeWebsite(url: string): Promise<WebsiteAnalysis> {
+  private mockAnalyzeContent(url: string) {
     try {
       // In a real implementation, you'd fetch the website
       // For now, we'll simulate based on domain patterns
@@ -72,6 +74,10 @@ export class WebsiteAnalyzer {
       console.error('Website analysis failed:', error);
       return this.getDefaultAnalysis(url);
     }
+  }
+
+  async analyzeWebsite(url: string): Promise<WebsiteAnalysis> {
+    return this.mockAnalyzeContent(url);
   }
 
   private simulateWebsiteAnalysis(url: string): WebsiteAnalysis {
@@ -181,7 +187,7 @@ export class WebsiteAnalyzer {
     };
   }
 
-  private getDefaultAnalysis(url: string): WebsiteAnalysis {
+  private getDefaultAnalysis(_url: string): WebsiteAnalysis {
     return {
       companyName: 'Your Company',
       industry: 'generic',

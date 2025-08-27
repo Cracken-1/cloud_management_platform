@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/database/supabase';
 
-export async function PATCH(
+export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { is_active, role, tenant_id } = await request.json();
-    const userId = params.id;
+    const { id } = await params;
+    const userId = id;
 
-    const updateData: any = {};
+    const updateData: { is_active?: boolean; role?: string; tenant_id?: string } = {};
     if (typeof is_active === 'boolean') updateData.is_active = is_active;
     if (role) updateData.role = role;
     if (tenant_id) updateData.tenant_id = tenant_id;
@@ -34,10 +35,11 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = params.id;
+    const { id } = await params;
+    const userId = id;
 
     // Delete from auth
     const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId);
