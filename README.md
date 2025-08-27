@@ -44,25 +44,50 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 - Vercel account
 
 ### Environment Variables Required
-Set these in your Vercel project settings:
+Set these in your Vercel project dashboard (Settings → Environment Variables):
 
-```bash
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-JWT_SECRET=your_super_secret_jwt_key
-```
+**Required for deployment:**
+- `NEXT_PUBLIC_SUPABASE_URL` = `https://your-project.supabase.co`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` = `your_supabase_anon_key`
+- `SUPABASE_SERVICE_ROLE_KEY` = `your_supabase_service_role_key`
+- `JWT_SECRET` = `your_super_secret_jwt_key`
+
+**Optional (for full functionality):**
+- `MPESA_CONSUMER_KEY` = `your_mpesa_consumer_key`
+- `MPESA_CONSUMER_SECRET` = `your_mpesa_consumer_secret`
+- `MPESA_BUSINESS_SHORT_CODE` = `174379`
+- `MPESA_PASSKEY` = `your_mpesa_passkey`
+- `MPESA_ENVIRONMENT` = `sandbox`
 
 ### Deploy Steps
-1. Connect your GitHub repository to Vercel
-2. Add the required environment variables
-3. Deploy - Vercel will automatically build and deploy
+1. **Connect Repository**: Link your GitHub repo to Vercel
+2. **Add Environment Variables**: Go to Settings → Environment Variables in Vercel dashboard
+3. **Set Required Variables**: Add the Supabase credentials above
+4. **Deploy**: Vercel will automatically build and deploy
+5. **Update Callback URLs**: Update M-Pesa callback URL to your Vercel domain
 
 ### Database Setup
 Run the SQL schema in your Supabase project:
 ```sql
 -- See src/lib/database/auth-schema.sql for complete schema
 ```
+
+### Troubleshooting Deployment
+
+**Build Errors:**
+- Ensure all required environment variables are set in Vercel
+- Check that Supabase URL and keys are correct
+- Verify your Supabase project is active
+
+**Runtime Errors:**
+- Check Vercel function logs for detailed error messages
+- Ensure database schema is properly set up in Supabase
+- Verify M-Pesa credentials if using payment features
+
+**Environment Variable Issues:**
+- Don't use `@secret` references in vercel.json - set variables directly in Vercel dashboard
+- Environment variables are case-sensitive
+- Restart deployment after adding new variables
 
 ## Architecture
 
