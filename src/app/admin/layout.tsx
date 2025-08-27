@@ -3,19 +3,21 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { UserRole, hasPermission } from '@/lib/auth/roles';
+import DynamicBranding from '@/components/admin/dynamic-branding';
 import { useAuth } from '@/lib/auth/auth-context';
 import {
   HomeIcon,
   ShoppingBagIcon,
+  TruckIcon,
   UsersIcon,
   ChartBarIcon,
-  CogIcon,
-  Bars3Icon,
-  XMarkIcon,
   CurrencyDollarIcon,
-  TruckIcon,
   BuildingStorefrontIcon,
   UserGroupIcon,
+  CogIcon,
+  XMarkIcon,
+  Bars3Icon,
   ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline';
 
@@ -79,7 +81,8 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
+    <DynamicBranding>
+      <div className="h-screen flex overflow-hidden bg-gray-100">
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 flex z-40 md:hidden ${sidebarOpen ? '' : 'hidden'}`}>
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
@@ -177,5 +180,6 @@ export default function AdminLayout({
         </main>
       </div>
     </div>
+    </DynamicBranding>
   );
 }

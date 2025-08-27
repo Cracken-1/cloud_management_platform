@@ -1,5 +1,5 @@
-import AdminDashboard from '@/components/admin/dashboard';
+import TenantDashboard from '@/components/admin/tenant-dashboard';
 
 export default function AdminPage() {
-  return <AdminDashboard />;
+  return <TenantDashboard />;
 }
