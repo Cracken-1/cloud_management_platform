@@ -43,7 +43,7 @@ export default function LoginForm() {
           setRequiresVerification(true);
         }
       }
-    } catch (error) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);

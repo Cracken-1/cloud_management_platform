@@ -75,7 +75,7 @@ export default function RegisterForm() {
       } else {
         setError(result.error || 'Registration request failed');
       }
-    } catch (error) {
+    } catch {
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);

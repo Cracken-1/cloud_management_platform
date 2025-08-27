@@ -204,7 +204,7 @@ export class DynamicPricingEngine {
 
   private applyKenyaMarketFactors(
     price: number,
-    data: PricingData
+    _data: PricingData
   ): { price: number; reasoning: string[] } {
     const reasoning: string[] = [];
     let adjustedPrice = price;
