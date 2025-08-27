@@ -63,8 +63,10 @@ Set these in your Vercel project dashboard (Settings → Environment Variables):
 1. **Connect Repository**: Link your GitHub repo to Vercel
 2. **Add Environment Variables**: Go to Settings → Environment Variables in Vercel dashboard
 3. **Set Required Variables**: Add the Supabase credentials above
-4. **Deploy**: Vercel will automatically build and deploy
+4. **Deploy**: Vercel automatically detects Next.js and deploys
 5. **Update Callback URLs**: Update M-Pesa callback URL to your Vercel domain
+
+> **Note**: No `vercel.json` needed - Vercel auto-detects Next.js 15 projects
 
 ### Database Setup
 Run the SQL schema in your Supabase project:
