@@ -179,7 +179,7 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-KE', {

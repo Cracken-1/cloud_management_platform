@@ -205,9 +205,9 @@ export class WebsiteAnalyzer {
     };
   }
 
-  private extractCompanyName(domain: string): string {
+  private extractCompanyName(url: string): string {
     // Remove common prefixes and suffixes
-    const name = domain
+    const name = url
       .replace(/^www\./, '')
       .replace(/\.(com|org|net|io|co|app).*$/, '')
       .replace(/[-_]/g, ' ');

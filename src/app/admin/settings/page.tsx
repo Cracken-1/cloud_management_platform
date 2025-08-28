@@ -1,14 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   CogIcon,
   BellIcon,
   ShieldCheckIcon,
   GlobeAltIcon,
   CurrencyDollarIcon,
-  UserIcon,
-  KeyIcon
 } from '@heroicons/react/24/outline';
 
 interface Settings {

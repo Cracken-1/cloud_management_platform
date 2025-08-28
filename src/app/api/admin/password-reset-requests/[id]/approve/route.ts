@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
-    const requestId = params.id;
+    const { id: requestId } = params;
 
     // Generate temporary password
     const generateTempPassword = () => {
@@ -26,6 +23,8 @@ export async function POST(
     // 2. Generate secure temporary password
     // 3. Send email notification to user
     // 4. Log admin action for audit trail
+
+    console.log('Approving password reset request:', requestId);
 
     return NextResponse.json({
       success: true,

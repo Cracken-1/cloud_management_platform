@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   CloudArrowDownIcon,
   CloudArrowUpIcon,
@@ -9,8 +9,6 @@ import {
   ExclamationTriangleIcon,
   XCircleIcon,
   PlayIcon,
-  StopIcon,
-  DocumentDuplicateIcon
 } from '@heroicons/react/24/outline';
 
 interface BackupJob {

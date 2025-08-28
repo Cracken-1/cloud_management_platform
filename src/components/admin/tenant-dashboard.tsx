@@ -50,27 +50,24 @@ export default function TenantDashboard({ tenantId }: TenantDashboardProps) {
   const [widgets, setWidgets] = useState<DashboardWidget[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchTenantConfig = async () => {
-    try {
-      const response = await fetch('/api/tenant/tenantConfig');
-      if (response.ok) {
-        const data = await response.json();
-        setTenantConfig(data.tenantConfig);
-        generateWidgets(data.tenantConfig);
-      }
-    } catch (error) {
-      console.error('Failed to fetch tenant tenantConfig:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (tenantId) {
-      fetchTenantConfig();
-    }
-  }, [tenantId, fetchTenantConfig]);
+    const fetchTenantConfig = async () => {
+      try {
+        const response = await fetch('/api/tenant/config');
+        if (response.ok) {
+          const data = await response.json();
+          setTenantConfig(data.config);
+          generateWidgets(data.config);
+        }
+      } catch (error) {
+        console.error('Failed to load tenant config:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchTenantConfig();
+  }, [tenantId]);
 
   const generateWidgets = (tenantConfig: TenantConfiguration) => {
     const baseWidgets: DashboardWidget[] = [
@@ -214,6 +211,7 @@ export default function TenantDashboard({ tenantId }: TenantDashboardProps) {
             </p>
           </div>
           {tenantConfig.branding.logo && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img 
               src={tenantConfig.branding.logo} 
               alt={`${tenantConfig.companyName} Logo`}

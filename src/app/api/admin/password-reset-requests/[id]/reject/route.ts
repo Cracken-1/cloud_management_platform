@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
-    const requestId = params.id;
+    const { id: requestId } = params;
     const { reason } = await request.json();
 
     if (!reason) {
@@ -19,6 +16,8 @@ export async function POST(
     // 1. Update request status in database
     // 2. Send email notification to user with rejection reason
     // 3. Log admin action for audit trail
+
+    console.log('Rejecting password reset request:', requestId, 'Reason:', reason);
 
     return NextResponse.json({
       success: true,

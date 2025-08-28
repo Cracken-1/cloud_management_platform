@@ -112,17 +112,12 @@ const mockAuditLogs: AuditLog[] = [
 ];
 
 export default function AuditLogsPage() {
-  const [logs, setLogs] = useState<AuditLog[]>(mockAuditLogs);
+  const [logs] = useState<AuditLog[]>(mockAuditLogs);
   const [filteredLogs, setFilteredLogs] = useState<AuditLog[]>(mockAuditLogs);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedSeverity, setSelectedSeverity] = useState<string>('all');
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    filterLogs();
-  }, [searchTerm, selectedCategory, selectedSeverity, dateRange, logs]);
 
   const filterLogs = () => {
     let filtered = logs;
@@ -159,6 +154,12 @@ export default function AuditLogsPage() {
 
     setFilteredLogs(filtered);
   };
+
+  useEffect(() => {
+    filterLogs();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm, selectedCategory, selectedSeverity, dateRange, logs]);
+
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {

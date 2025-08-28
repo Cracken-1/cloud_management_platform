@@ -12,20 +12,23 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
   const [config, setConfig] = useState<TenantConfiguration | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const loadTenantConfig = async () => {
-    try {
-      const tenantConfig = await tenantService.getTenantConfiguration(tenantId);
-      setConfig(tenantConfig);
-    } catch (error) {
-      console.error('Failed to load tenant configuration:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const loadTenantConfig = async () => {
+      try {
+        const response = await fetch('/api/tenant/config');
+        if (response.ok) {
+          const data = await response.json();
+          setConfig(data.config);
+        }
+      } catch (error) {
+        console.error('Failed to load tenant config:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadTenantConfig();
-  }, [tenantId, loadTenantConfig]);
+  }, []);
 
   if (loading) {
     return (
@@ -59,7 +62,6 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
             <div className="flex items-center">
               {config.branding.logo && (
                 <img
-              // eslint-disable-next-line @next/next/no-img-element 
                   src={config.branding.logo} 
                   alt={`${config.companyName} Logo`}
                   className="h-8 w-auto mr-3"

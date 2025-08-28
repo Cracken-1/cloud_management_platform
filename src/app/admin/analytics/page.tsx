@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 import {
   ChartBarIcon,
   CurrencyDollarIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
+  ShoppingCartIcon,
   UsersIcon,
-  ShoppingCartIcon
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon
 } from '@heroicons/react/24/outline';
 
 interface AnalyticsData {
@@ -104,12 +104,11 @@ export default function AnalyticsPage() {
     const isPositive = change >= 0;
     return (
       <div className={`flex items-center ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-        {isPositive ? (
-          <TrendingUpIcon className="h-4 w-4 mr-1" />
+        {change > 0 ? (
+          <ArrowTrendingUpIcon className="h-4 w-4 text-green-500" />
         ) : (
-          <TrendingDownIcon className="h-4 w-4 mr-1" />
-        )}
-        <span>{Math.abs(change).toFixed(1)}%</span>
+          <ArrowTrendingDownIcon className="h-4 w-4 text-red-500" />
+        )} <span>{Math.abs(change).toFixed(1)}%</span>
       </div>
     );
   };

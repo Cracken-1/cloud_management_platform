@@ -176,7 +176,7 @@ export class MPesaService {
     return transaction;
   }
 
-  async queryTransactionStatus(checkoutRequestId: string): Promise<Record<string, unknown>> {
+  async queryTransactionStatus(_tenantId: string, transactionId: string): Promise<{ success: boolean; data?: any; error?: string }> {
     const accessToken = await this.getAccessToken();
     const timestamp = this.generateTimestamp();
     const password = this.generatePassword();
@@ -185,7 +185,7 @@ export class MPesaService {
       BusinessShortCode: this.config.businessShortCode,
       Password: password,
       Timestamp: timestamp,
-      CheckoutRequestID: checkoutRequestId
+      CheckoutRequestID: transactionId
     };
 
     const response = await fetch(`${this.baseUrl}/mpesa/stkpushquery/v1/query`, {
@@ -247,7 +247,7 @@ export class MPesaService {
     }
   }
 
-  async processPayment(amount: number, phoneNumber: string, tenantId: string): Promise<Record<string, unknown>> {
+  async processPayment(amount: number, phoneNumber: string, _tenantId: string): Promise<{ success: boolean; data?: any; error?: string }> {
     const accessToken = await this.getAccessToken();
 
     const payload = {

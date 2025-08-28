@@ -293,42 +293,42 @@ export class AuthService {
 
   // Admin-only: Approve registration request
   async approveRegistrationRequest(
-    requestId: string, 
-    approvedBy: string,
-    assignedRole: UserRole,
-    tenantId?: string
-  ): Promise<AuthResponse> {
-    try {
-      // Get the registration request
-      const { data: request, error: requestError } = await supabase
-        .from('registration_requests')
-        .select('*')
-        .eq('id', requestId)
-        .eq('status', 'PENDING')
-        .single();
+  requestId: string, 
+  approvedBy: string,
+  assignedRole: UserRole,
+  tenantId?: string
+): Promise<AuthResponse> {
+  try {
+    // Get the registration request
+    const { data: request, error: requestError } = await supabase
+      .from('registration_requests')
+      .select('*')
+      .eq('id', requestId)
+      .eq('status', 'PENDING')
+      .single();
 
-      if (requestError || !request) {
-        return { success: false, error: 'Registration request not found' };
-      }
+    if (requestError || !request) {
+      return { success: false, error: 'Registration request not found' };
+    }
 
-      // Generate temporary password
-      const tempPassword = this.generateTempPassword();
+    // Generate temporary password
+    const tempPassword = this.generateTempPassword();
+    
+    // Create user account
+    const createResult = await this.createUser({
+      email: request.email,
+      password: tempPassword,
+      firstName: request.first_name,
+      lastName: request.last_name,
+      role: assignedRole,
+      tenantId
+    }, approvedBy);
 
-      // Create user account
-      const createResult = await this.createUser({
-        email: request.email,
-        password: tempPassword,
-        firstName: request.first_name,
-        lastName: request.last_name,
-        role: assignedRole,
-        tenantId
-      }, approvedBy);
+    if (!createResult.success) {
+      return createResult;
+    }
 
-      if (!createResult.success) {
-        return createResult;
-      }
-
-      // Update registration request status
+    // Update registration request status
       await supabase
         .from('registration_requests')
         .update({
@@ -350,6 +350,17 @@ export class AuthService {
     }
   }
 
+  // Add missing method implementations
+  async notifyAdminsOfNewRequest(request: { id: string; email: string }): Promise<void> {
+    // TODO: Implement admin notification system
+    console.log('Admin notification sent for request:', request.id);
+  }
+
+  async sendWelcomeEmail(email: string, tempPassword: string): Promise<void> {
+    // TODO: Implement actual email service integration
+    console.log('Welcome email sent to:', email, 'with temp password:', tempPassword);
+  }
+
   private generateTempPassword(): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
     let password = '';
@@ -357,17 +368,6 @@ export class AuthService {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return password;
-  }
-
-  private async notifyAdminsOfNewRequest(request: RegistrationRequest): Promise<void> {
-    // Implement notification to superadmins
-    // This could be email, Slack, or in-app notification
-    console.log('New registration request:', request.email);
-  }
-
-  private async sendWelcomeEmail(email: string, _tempPassword: string): Promise<void> {
-    // Implement welcome email with temporary password
-    console.log('Welcome email sent to:', email);
   }
 }
 
