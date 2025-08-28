@@ -8,28 +8,30 @@ import { useAuth } from '@/lib/auth/auth-context';
 import {
   HomeIcon,
   ShoppingBagIcon,
-  TruckIcon,
   UsersIcon,
+  CogIcon,
   ChartBarIcon,
+  ShoppingCartIcon,
+  KeyIcon,
+  XMarkIcon,
+  Bars3Icon,
+  ArrowRightOnRectangleIcon,
   CurrencyDollarIcon,
   BuildingStorefrontIcon,
   UserGroupIcon,
-  CogIcon,
-  XMarkIcon,
-  Bars3Icon,
-  ArrowRightOnRectangleIcon
+  DocumentTextIcon,
+  CloudArrowUpIcon
 } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: HomeIcon },
   { name: 'Inventory', href: '/admin/inventory', icon: ShoppingBagIcon },
-  { name: 'Orders', href: '/admin/orders', icon: TruckIcon },
+  { name: 'Orders', href: '/admin/orders', icon: ShoppingCartIcon },
   { name: 'Customers', href: '/admin/customers', icon: UsersIcon },
   { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
   { name: 'Pricing', href: '/admin/pricing', icon: CurrencyDollarIcon },
   { name: 'Suppliers', href: '/admin/suppliers', icon: BuildingStorefrontIcon },
   { name: 'Staff', href: '/admin/staff', icon: UserGroupIcon },
-  { name: 'Settings', href: '/admin/settings', icon: CogIcon },
 ];
 
 function UserProfile() {
@@ -120,6 +122,50 @@ export default function AdminLayout({
                   </Link>
                 );
               })}
+              <Link
+                href="/admin/password-reset"
+                className={`${
+                  pathname === '/admin/password-reset'
+                    ? 'bg-blue-50 border-blue-500 text-blue-700'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                } group flex items-center px-2 py-2 text-sm font-medium border-l-4`}
+              >
+                <KeyIcon className="mr-3 h-5 w-5" />
+                Password Reset
+              </Link>
+              <Link
+                href="/admin/settings"
+                className={`${
+                  pathname === '/admin/settings'
+                    ? 'bg-blue-50 border-blue-500 text-blue-700'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                } group flex items-center px-2 py-2 text-sm font-medium border-l-4`}
+              >
+                <CogIcon className="mr-3 h-5 w-5" />
+                Settings
+              </Link>
+              <Link
+                href="/admin/audit-logs"
+                className={`${
+                  pathname === '/admin/audit-logs'
+                    ? 'bg-blue-50 border-blue-500 text-blue-700'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                } group flex items-center px-2 py-2 text-sm font-medium border-l-4`}
+              >
+                <DocumentTextIcon className="mr-3 h-5 w-5" />
+                Audit Logs
+              </Link>
+              <Link
+                href="/admin/backup"
+                className={`${
+                  pathname === '/admin/backup'
+                    ? 'bg-blue-50 border-blue-500 text-blue-700'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                } group flex items-center px-2 py-2 text-sm font-medium border-l-4`}
+              >
+                <CloudArrowUpIcon className="mr-3 h-5 w-5" />
+                Backup & Recovery
+              </Link>
             </nav>
           </div>
         </div>

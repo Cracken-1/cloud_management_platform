@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   ChartBarIcon, 
@@ -12,7 +12,6 @@ import {
   ArrowUpIcon
 } from '@heroicons/react/24/outline';
 import { useAuth } from '@/lib/auth/auth-context';
-import { tenantService } from '@/lib/tenant/tenant-service';
 import DynamicDashboard from '@/components/admin/dynamic-dashboard';
 
 interface DashboardStats {
@@ -67,7 +66,7 @@ export default function AdminDashboard() {
   const { user } = useAuth();
   const router = useRouter();
 
-  const checkTenantSetup = async () => {
+  const checkTenantSetup = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -80,7 +79,6 @@ export default function AdminDashboard() {
         const response = await fetch('/api/tenant/config');
         if (response.ok) {
           const data = await response.json();
-          const tenantName = (tenantConfig?.companyName as string) || 'Your Company';
           if (data.config) {
             setTenantConfig(data.config);
           }
@@ -92,7 +90,7 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     checkTenantSetup();
@@ -102,9 +100,9 @@ export default function AdminDashboard() {
     if (user) {
       checkTenantSetup();
     }
-  }, [user]);
+  }, [user, checkTenantSetup]);
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       // Simulate API calls - replace with actual API endpoints
       const mockStats: DashboardStats = {

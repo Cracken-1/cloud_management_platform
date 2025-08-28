@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 interface BrandingConfig {
   companyName: string;
@@ -20,7 +20,7 @@ export default function DynamicBranding({ children, tenantId }: DynamicBrandingP
   const [branding, setBranding] = useState<BrandingConfig | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchBranding = async (config?: { colors?: { primary: string; secondary: string; accent: string }; companyName?: string }) => {
+  const fetchBranding = useCallback(async () => {
     try {
       const response = await fetch('/api/tenant/config');
       if (response.ok) {
@@ -42,13 +42,13 @@ export default function DynamicBranding({ children, tenantId }: DynamicBrandingP
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchBranding();
-  }, [tenantId]);
+  }, [tenantId, fetchBranding]);
 
-  const applyBrandingStyles = (branding: any) => {
+  const applyBrandingStyles = (branding: BrandingConfig) => {
     const root = document.documentElement;
     root.style.setProperty('--brand-primary', branding.primaryColor);
     root.style.setProperty('--brand-secondary', branding.secondaryColor);
