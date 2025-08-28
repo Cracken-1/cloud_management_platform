@@ -177,73 +177,102 @@ export class MPesaService {
   }
 
   async queryTransactionStatus(_tenantId: string, transactionId: string): Promise<{ success: boolean; data?: any; error?: string }> {
-    const accessToken = await this.getAccessToken();
-    const timestamp = this.generateTimestamp();
-    const password = this.generatePassword();
+    try {
+      const accessToken = await this.getAccessToken();
+      const timestamp = this.generateTimestamp();
+      const password = this.generatePassword();
 
-    const payload = {
-      BusinessShortCode: this.config.businessShortCode,
-      Password: password,
-      Timestamp: timestamp,
-      CheckoutRequestID: transactionId
-    };
+      const payload = {
+        BusinessShortCode: this.config.businessShortCode,
+        Password: password,
+        Timestamp: timestamp,
+        CheckoutRequestID: transactionId
+      };
 
-    const response = await fetch(`${this.baseUrl}/mpesa/stkpushquery/v1/query`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+      const response = await fetch(`${this.baseUrl}/mpesa/stkpushquery/v1/query`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
 
-    return await response.json();
+      if (!response.ok) {
+        const error = await response.text();
+        console.error('MPesa query transaction status failed:', error);
+        return { success: false, error: 'Failed to query transaction status' };
+      }
+
+      const result = await response.json();
+      return { success: true, data: result };
+    } catch (error) {
+      console.error('Error querying MPesa transaction status:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
   }
 
   async handleCallback(callbackData: Record<string, unknown>, tenantId: string): Promise<void> {
-    const Body = callbackData.Body as Record<string, unknown>;
-    const stkCallback = Body.stkCallback as Record<string, unknown>;
-    
-    const checkoutRequestId = stkCallback.CheckoutRequestID as string;
-    const resultCode = stkCallback.ResultCode as number;
-    const resultDesc = stkCallback.ResultDesc as string;
-
-    let status: MPesaTransaction['status'] = 'FAILED';
-    let mpesaReceiptNumber: string | undefined;
-
-    if (resultCode === 0) {
-      status = 'SUCCESS';
-      // Extract M-Pesa receipt number from callback items
-      const callbackMetadata = (stkCallback.CallbackMetadata as Record<string, unknown>)?.Item as Record<string, unknown>[] || [];
-      const receiptItem = callbackMetadata.find((item: Record<string, unknown>) => item.Name === 'MpesaReceiptNumber');
-      mpesaReceiptNumber = receiptItem?.Value as string;
-    }
-
-    // Update transaction in database
-    await supabase
-      .from('mpesa_transactions')
-      .update({
-        status,
-        completed_at: new Date().toISOString(),
-        failure_reason: resultCode !== 0 ? resultDesc : null
-      })
-      .eq('transaction_id', checkoutRequestId)
-      .eq('tenant_id', tenantId);
-
-    // If successful and linked to an order, update order status
-    if (status === 'SUCCESS') {
-      const { data: transaction } = await supabase
+    try {
+      const body = callbackData.Body as Record<string, unknown>;
+      const stkCallback = body?.stkCallback as Record<string, unknown>;
+      
+      if (!stkCallback) {
+        console.error('Invalid callback data:', callbackData);
+        return;
+      }
+      
+      const checkoutRequestId = stkCallback.CheckoutRequestID as string;
+      const resultCode = stkCallback.ResultCode as number;
+      const resultDesc = stkCallback.ResultDesc as string;
+      
+      // Find transaction in database
+      const { data: transaction, error } = await supabase
         .from('mpesa_transactions')
-        .select('order_id')
-        .eq('transaction_id', checkoutRequestId)
+        .select('*')
+        .eq('checkout_request_id', checkoutRequestId)
         .eq('tenant_id', tenantId)
         .single();
 
-      if (transaction?.order_id) {
-        // Update order status to paid (assuming orders table exists)
-        // This would integrate with your main PandaMart platform
+      if (error || !transaction) {
+        console.error('Transaction not found:', checkoutRequestId);
+        return;
+      }
+
+      // Update transaction status based on result code
+      let status: 'SUCCESS' | 'FAILED' = 'FAILED';
+      let mpesaReceiptNumber: string | null = null;
+
+      if (resultCode === 0) {
+        status = 'SUCCESS';
+        // Extract M-Pesa receipt number if available
+        const callbackMetadata = (stkCallback.CallbackMetadata as any)?.Item?.find(
+          (item: any) => item.Name === 'MpesaReceiptNumber'
+        );
+        mpesaReceiptNumber = callbackMetadata?.Value || null;
+      }
+
+      // Update transaction in database
+      const { error: updateError } = await supabase
+        .from('mpesa_transactions')
+        .update({
+          status,
+          mpesa_receipt_number: mpesaReceiptNumber,
+          result_code: resultCode,
+          result_description: resultDesc,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', transaction.id);
+
+      if (updateError) {
+        console.error('Error updating transaction:', updateError);
+      }
+
+      if (transaction.order_id) {
         console.log(`Order ${transaction.order_id} paid via M-Pesa: ${mpesaReceiptNumber}`);
       }
+    } catch (error) {
+      console.error('Error in handleCallback:', error);
     }
   }
 

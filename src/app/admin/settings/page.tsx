@@ -394,7 +394,7 @@ export default function SettingsPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="Twilio">Twilio</option>
-                      <option value="Africa's Talking">Africa's Talking</option>
+                      <option value="Africa&apos;s Talking">Africa&apos;s Talking</option>
                       <option value="SMS Gateway">SMS Gateway</option>
                     </select>
                   </div>
