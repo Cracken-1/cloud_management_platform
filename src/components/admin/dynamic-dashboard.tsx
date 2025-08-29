@@ -4,17 +4,163 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import type { TenantConfiguration } from '@/lib/tenant/website-analyzer';
 
-interface DynamicDashboardProps {
-  tenantId: string;
+function getDemoConfigurations(): Record<string, TenantConfiguration> {
+  return {
+    'freshfoods': {
+      id: 'freshfoods',
+      domain: 'freshfoods.demo',
+      companyName: 'Fresh Foods Restaurant',
+      industry: 'restaurant',
+      websiteUrl: 'https://freshfoodsrestaurant.com',
+      branding: {
+        primaryColor: '#FF6B35',
+        secondaryColor: '#F7931E',
+        accentColor: '#FFD23F',
+        fontFamily: 'Inter, sans-serif',
+        logo: undefined
+      },
+      features: {
+        inventory: true,
+        analytics: true,
+        payments: true,
+        crm: true,
+        ecommerce: false,
+        delivery: true
+      },
+      dashboardLayout: 'restaurant',
+      customization: {
+        description: 'Manage your restaurant operations with fresh, locally-sourced ingredients'
+      }
+    },
+    'techmart': {
+      id: 'techmart',
+      domain: 'techmart.demo',
+      companyName: 'TechMart Electronics',
+      industry: 'retail',
+      websiteUrl: 'https://techmartstore.com',
+      branding: {
+        primaryColor: '#2E86AB',
+        secondaryColor: '#A23B72',
+        accentColor: '#F18F01',
+        fontFamily: 'Inter, sans-serif',
+        logo: undefined
+      },
+      features: {
+        inventory: true,
+        analytics: true,
+        payments: true,
+        crm: true,
+        ecommerce: true,
+        delivery: false
+      },
+      dashboardLayout: 'retail',
+      customization: {
+        description: 'Leading electronics retailer with comprehensive inventory management'
+      }
+    },
+    'swiftlogistics': {
+      id: 'swiftlogistics',
+      domain: 'swiftlogistics.demo',
+      companyName: 'Swift Logistics',
+      industry: 'logistics',
+      websiteUrl: 'https://swiftdelivery.com',
+      branding: {
+        primaryColor: '#1B4332',
+        secondaryColor: '#40916C',
+        accentColor: '#95D5B2',
+        fontFamily: 'Inter, sans-serif',
+        logo: undefined
+      },
+      features: {
+        inventory: false,
+        analytics: true,
+        payments: true,
+        crm: true,
+        ecommerce: false,
+        delivery: true
+      },
+      dashboardLayout: 'logistics',
+      customization: {
+        description: 'Fast and reliable delivery services with route optimization'
+      }
+    },
+    'digitalsolutions': {
+      id: 'digitalsolutions',
+      domain: 'digitalsolutions.demo',
+      companyName: 'Digital Solutions Inc',
+      industry: 'technology',
+      websiteUrl: 'https://digitalsoftware.com',
+      branding: {
+        primaryColor: '#6366F1',
+        secondaryColor: '#8B5CF6',
+        accentColor: '#06B6D4',
+        fontFamily: 'Inter, sans-serif',
+        logo: undefined
+      },
+      features: {
+        inventory: false,
+        analytics: true,
+        payments: true,
+        crm: true,
+        ecommerce: false,
+        delivery: false
+      },
+      dashboardLayout: 'generic',
+      customization: {
+        description: 'Software development and digital transformation consultancy'
+      }
+    },
+    'cloudflow': {
+      id: 'cloudflow',
+      domain: 'cloudflow.demo',
+      companyName: 'CloudFlow E-commerce',
+      industry: 'ecommerce',
+      websiteUrl: 'https://cloudflow-ecommerce.com',
+      branding: {
+        primaryColor: '#059669',
+        secondaryColor: '#0D9488',
+        accentColor: '#F59E0B',
+        fontFamily: 'Inter, sans-serif',
+        logo: undefined
+      },
+      features: {
+        inventory: true,
+        analytics: true,
+        payments: true,
+        crm: true,
+        ecommerce: true,
+        delivery: true
+      },
+      dashboardLayout: 'retail',
+      customization: {
+        description: 'Advanced e-commerce platform with AI-powered features'
+      }
+    }
+  };
 }
 
-export default function DynamicDashboard({ }: DynamicDashboardProps) {
+interface DynamicDashboardProps {
+  companyId: string;
+}
+
+export default function DynamicDashboard({ companyId }: DynamicDashboardProps) {
   const [config, setConfig] = useState<TenantConfiguration | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadTenantConfig = async () => {
       try {
+        // For demo companies, use predefined configurations
+        const demoConfigs = getDemoConfigurations();
+        const demoConfig = demoConfigs[companyId];
+        
+        if (demoConfig) {
+          setConfig(demoConfig);
+          setLoading(false);
+          return;
+        }
+        
+        // For real tenants, fetch from API
         const response = await fetch('/api/tenant/config');
         if (response.ok) {
           const data = await response.json();
@@ -28,7 +174,7 @@ export default function DynamicDashboard({ }: DynamicDashboardProps) {
     };
 
     loadTenantConfig();
-  }, []);
+  }, [companyId]);
 
   if (loading) {
     return (

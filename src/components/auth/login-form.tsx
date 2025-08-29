@@ -46,10 +46,10 @@ const demoCompanies: DemoCompany[] = [
     credentials: { email: 'admin@digitalsolutions.com', password: 'demo123' }
   },
   {
-    id: 'pandamart',
-    name: 'PandaMart Kenya',
+    id: 'cloudflow',
+    name: 'CloudFlow E-commerce',
     colors: { primary: '#059669', secondary: '#d1fae5', accent: '#10b981' },
-    credentials: { email: 'admin@pandamart.co.ke', password: 'demo123' }
+    credentials: { email: 'admin@cloudflow.com', password: 'demo123' }
   }
 ];
 

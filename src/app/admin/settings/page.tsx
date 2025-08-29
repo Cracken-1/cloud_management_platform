@@ -41,7 +41,7 @@ interface Settings {
 export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings>({
     general: {
-      companyName: 'PandaMart Kenya',
+      companyName: 'Cloud Management Platform',
       timezone: 'Africa/Nairobi',
       currency: 'KES',
       language: 'en'

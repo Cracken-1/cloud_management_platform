@@ -91,21 +91,21 @@ const mockCompanies: MockCompany[] = [
     features: ['Project Management', 'Team Collaboration', 'Client Portal', 'Time Tracking']
   },
   {
-    id: 'pandamart',
-    name: 'PandaMart Kenya (Original)',
+    id: 'cloudflow',
+    name: 'CloudFlow E-commerce',
     industry: 'E-commerce',
-    description: 'The original PandaMart platform - comprehensive e-commerce solution',
-    websiteUrl: 'https://pandamart.co.ke',
+    description: 'Advanced e-commerce platform with AI-powered features and market optimization',
+    websiteUrl: 'https://cloudflow-ecommerce.com',
     colors: {
       primary: '#059669',
       secondary: '#0D9488',
       accent: '#F59E0B'
     },
     credentials: {
-      email: 'admin@pandamart.co.ke',
+      email: 'admin@cloudflow.com',
       password: 'demo123'
     },
-    features: ['Multi-vendor Marketplace', 'M-Pesa Integration', 'AI Pricing', 'Inventory Forecasting']
+    features: ['Multi-vendor Marketplace', 'Payment Integration', 'AI Pricing', 'Inventory Forecasting']
   }
 ];
 

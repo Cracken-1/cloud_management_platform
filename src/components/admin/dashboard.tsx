@@ -245,10 +245,10 @@ export default function AdminDashboard() {
 
   // If tenant is configured, show dynamic dashboard
   if (tenantConfig) {
-    return <DynamicDashboard tenantId={tenantConfig.id as string} />;
+    return <DynamicDashboard companyId={tenantConfig.id as string} />;
   }
 
-  // Fallback to original PandaMart dashboard
+  // Fallback to generic cloud dashboard
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">
             <h1 className="text-3xl font-bold text-gray-900">
-              PandaMart Admin Dashboard
+              Cloud Admin Dashboard
             </h1>
             <p className="mt-2 text-gray-600">
               Welcome back! Here&apos;s what&apos;s happening with your store today.

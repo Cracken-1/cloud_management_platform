@@ -120,7 +120,7 @@ export default function RegisterForm() {
               Registration Request Submitted
             </h2>
             <p className="text-gray-600 mb-6">
-              Thank you for your interest in PandaMart Admin Portal. Your registration request has been submitted successfully.
+              Thank you for your interest in Cloud Admin Portal. Your registration request has been submitted successfully.
             </p>
             <div className="bg-blue-50 rounded-lg p-4 mb-6">
               <div className="flex">
@@ -160,7 +160,7 @@ export default function RegisterForm() {
             Request Admin Access
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Apply for administrative access to PandaMart Cloud Management Platform
+            Apply for administrative access to Adaptive Cloud Management Platform
           </p>
         </div>
 
@@ -366,7 +366,7 @@ export default function RegisterForm() {
                     required
                     rows={4}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Describe your business, products/services, and how you plan to use PandaMart"
+                    placeholder="Describe your business, products/services, and how you plan to use the platform"
                     value={formData.businessDescription}
                     onChange={(e) => handleInputChange('businessDescription', e.target.value)}
                   />
@@ -474,7 +474,7 @@ export default function RegisterForm() {
             <div className="text-sm text-yellow-800">
               <p className="font-medium mb-1">Enterprise Registration Policy</p>
               <p>
-                PandaMart Admin Portal is an enterprise platform. All registration requests require 
+                Cloud Admin Portal is an enterprise platform. All registration requests require 
                 manual approval by our administrative team. Self-registration is not permitted to 
                 ensure security and proper access control.
               </p>

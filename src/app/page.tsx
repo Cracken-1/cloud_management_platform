@@ -18,9 +18,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">PandaMart</h1>
+              <h1 className="text-2xl font-bold text-gray-900">CloudFlow</h1>
               <span className="ml-2 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                Cloud Management
+                Management Platform
               </span>
             </div>
             <Link
@@ -209,7 +209,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-400">
-              © 2025 PandaMart Cloud Management Platform. Built for Kenya&apos;s e-commerce future.
+              © 2025 CloudFlow Management Platform. Adaptive business solutions for every industry.
             </p>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getDemoSession, isValidDemoSession } from '@/lib/auth/demo-session';
 
 export async function middleware(req: NextRequest) {
   // Skip middleware during build time if environment variables are not available
@@ -50,6 +51,7 @@ export async function middleware(req: NextRequest) {
   // Public routes that don't require authentication
   const publicRoutes = [
     '/',
+    '/demo',
     '/auth/login',
     '/auth/register',
     '/auth/forgot-password',
@@ -59,6 +61,7 @@ export async function middleware(req: NextRequest) {
   // API routes that don't require authentication
   const publicApiRoutes = [
     '/api/auth/callback',
+    '/api/auth/mock-login',
     '/api/registration/submit'
   ];
 
@@ -71,8 +74,25 @@ export async function middleware(req: NextRequest) {
     return res;
   }
 
-  // If no session and trying to access protected route, redirect to login
+  // Check for demo session if no regular session
   if (!session) {
+    const demoSession = getDemoSession(req);
+    
+    if (isValidDemoSession(demoSession)) {
+      // Allow demo access to admin routes
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set('x-demo-session', 'true');
+      requestHeaders.set('x-demo-company', demoSession!.companyId);
+      requestHeaders.set('x-demo-name', demoSession!.companyName);
+      
+      return NextResponse.next({
+        request: {
+          headers: requestHeaders,
+        },
+      });
+    }
+    
+    // No session and no valid demo session, redirect to login
     const redirectUrl = new URL('/auth/login', req.url);
     redirectUrl.searchParams.set('redirectTo', pathname);
     return NextResponse.redirect(redirectUrl);

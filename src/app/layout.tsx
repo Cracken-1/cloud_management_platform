@@ -6,8 +6,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'PandaMart Cloud Management Platform',
-  description: 'Advanced administrative system for PandaMart Kenya e-commerce platform with AI-powered features',
+  title: 'Adaptive Cloud Management Platform',
+  description: 'Advanced administrative system for multi-tenant cloud management with AI-powered features',
 };
 
 export default function RootLayout({
