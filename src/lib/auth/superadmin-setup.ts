@@ -156,7 +156,8 @@ export class SuperadminSetup {
                             last_name: setupData.lastName,
                             role: 'SUPERADMIN',
                             phone_number: setupData.phoneNumber
-                        }
+                        },
+                        emailRedirectTo: `${window.location.origin}/superadmin/login?verified=true`
                     }
                 });
 
@@ -176,12 +177,26 @@ export class SuperadminSetup {
                 }
 
                 userId = signUpData.user.id;
+                
+                // For superadmin, we'll mark as verified immediately for development
+                // In production, you might want to require email verification
+                if (process.env.NODE_ENV === 'development') {
+                    // Auto-verify for development
+                    try {
+                        await this.supabase.auth.admin.updateUserById(userId, {
+                            email_confirm: true
+                        });
+                    } catch (adminError) {
+                        console.warn('Could not auto-verify email (admin access required):', adminError);
+                    }
+                }
             }
 
             // Ensure system tenant exists
             const tenantId = await this.ensureSystemTenant(setupData.organizationName);
 
             // Create user profile
+            const isVerified = setupData.isGoogleAuth || process.env.NODE_ENV === 'development';
             const { error: profileError } = await this.supabase
                 .from('user_profiles')
                 .insert({
@@ -192,8 +207,8 @@ export class SuperadminSetup {
                     phone_number: setupData.phoneNumber,
                     role: 'SUPERADMIN',
                     is_active: true,
-                    is_verified: setupData.isGoogleAuth || false, // Google users are pre-verified
-                    email_verified_at: setupData.isGoogleAuth ? new Date().toISOString() : null,
+                    is_verified: isVerified,
+                    email_verified_at: isVerified ? new Date().toISOString() : null,
                     last_login_at: null,
                     preferences: {
                         theme: 'light',
