@@ -159,7 +159,7 @@ export default function RequestAccess() {
           </h1>
           
           <p className="text-gray-600 mb-6">
-            Thank you for your interest in our platform. We've received your access request and will review it within 24-48 hours.
+            Thank you for your interest in our platform. We have received your access request and will review it within 24-48 hours.
           </p>
           
           <div className="bg-blue-50 rounded-lg p-4 mb-6">
