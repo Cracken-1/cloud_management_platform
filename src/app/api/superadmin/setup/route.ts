@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server';
-import { superadminSetup } from '@/lib/auth/superadmin-setup';
+import { superadminSetup, SuperadminSetupData } from '@/lib/auth/superadmin-setup';
+
+interface SuperadminSetupRequest extends SuperadminSetupData {
+  isGoogleAuth?: boolean;
+  googleUserId?: string;
+}
 
 export async function POST(request: Request) {
   try {
-    const setupData = await request.json();
+    const setupData: SuperadminSetupRequest = await request.json();
     
     // Validate required fields (password not required for Google OAuth)
     const requiredFields = setupData.isGoogleAuth 
@@ -48,10 +53,13 @@ export async function GET() {
       superadminExists: exists
     });
     
-  } catch (error: any) {
+  } catch (error) {
     console.error('Superadmin check API error:', error);
     return NextResponse.json(
-      { error: 'Failed to check superadmin status' },
+      { 
+        error: 'Failed to check superadmin status',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
