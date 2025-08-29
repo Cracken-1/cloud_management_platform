@@ -508,10 +508,10 @@ export default function RequestAccess() {
                       className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
                     >
                       <option value="" className="bg-gray-800">Select volume</option>
-                      <option value="LOW" className="bg-gray-800">Low (< 1,000 transactions)</option>
+                      <option value="LOW" className="bg-gray-800">Low (&lt; 1,000 transactions)</option>
                       <option value="MEDIUM" className="bg-gray-800">Medium (1,000 - 10,000)</option>
                       <option value="HIGH" className="bg-gray-800">High (10,000 - 100,000)</option>
-                      <option value="ENTERPRISE" className="bg-gray-800">Enterprise (> 100,000)</option>
+                      <option value="ENTERPRISE" className="bg-gray-800">Enterprise (&gt; 100,000)</option>
                     </select>
                   </div>
 
