@@ -277,7 +277,7 @@ export class MPesaService {
     }
   }
 
-  async processPayment(amount: number, phoneNumber: string, tenantId: string): Promise<Record<string, unknown>> {
+  async processPayment(amount: number, phoneNumber: string, _tenantId: string): Promise<Record<string, unknown>> {
     const accessToken = await this.getAccessToken();
 
     const payload = {
@@ -389,7 +389,7 @@ export class MPesaService {
     return (dailyTotal + amount) <= DAILY_LIMIT;
   }
 
-  async suggestOptimalPaymentTiming(amount: number): Promise<string> {
+  async suggestOptimalPaymentTiming(_amount: number): Promise<string> {
     // Suggest best times for M-Pesa transactions based on network load
     const hour = new Date().getHours();
 
