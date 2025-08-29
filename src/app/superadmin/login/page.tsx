@@ -13,7 +13,9 @@ import {
   ServerIcon,
   UsersIcon,
   ChartBarIcon,
-  LockClosedIcon
+  LockClosedIcon,
+  BuildingOfficeIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 
 export default function SuperadminLogin() {
@@ -79,72 +81,66 @@ export default function SuperadminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-3/4 left-3/4 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl animate-pulse delay-2000"></div>
-      </div>
-
-      <div className="relative max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
         {/* Header Section */}
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center mb-6 transform hover:scale-110 transition-transform duration-200">
+          <div className="mx-auto h-16 w-16 bg-red-600 rounded-lg flex items-center justify-center mb-6">
             <ShieldCheckIcon className="h-8 w-8 text-white" />
           </div>
-          <h2 className="text-4xl font-bold text-white mb-2">
+          <h2 className="text-3xl font-bold text-white mb-2">
             Superadmin Portal
           </h2>
-          <p className="text-lg text-purple-200 mb-6">
+          <p className="text-gray-300 mb-6">
             Platform Administration Access
           </p>
           
           {/* Warning Banner */}
-          <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
+          <div className="bg-red-900/30 border border-red-600/50 rounded-lg p-4 mb-6">
             <div className="flex items-center justify-center">
               <LockClosedIcon className="h-5 w-5 text-red-400 mr-2" />
-              <p className="text-sm text-red-300 font-medium">
+              <p className="text-sm text-red-200 font-medium">
                 Restricted Access - Authorized Personnel Only
               </p>
             </div>
           </div>
         </div>
 
-        {/* Features Grid */}
+        {/* Administrative Features */}
         <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-            <UsersIcon className="h-6 w-6 text-purple-400 mb-2" />
-            <p className="text-xs text-gray-300">Multi-Tenant Management</p>
+          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+            <UsersIcon className="h-6 w-6 text-blue-400 mb-2" />
+            <p className="text-xs font-medium text-gray-300">Multi-Tenant Management</p>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-            <ServerIcon className="h-6 w-6 text-blue-400 mb-2" />
-            <p className="text-xs text-gray-300">System Administration</p>
+          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+            <ServerIcon className="h-6 w-6 text-green-400 mb-2" />
+            <p className="text-xs font-medium text-gray-300">System Administration</p>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-            <ChartBarIcon className="h-6 w-6 text-green-400 mb-2" />
-            <p className="text-xs text-gray-300">Analytics & Monitoring</p>
+          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+            <ChartBarIcon className="h-6 w-6 text-purple-400 mb-2" />
+            <p className="text-xs font-medium text-gray-300">Analytics & Monitoring</p>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
             <CpuChipIcon className="h-6 w-6 text-yellow-400 mb-2" />
-            <p className="text-xs text-gray-300">Platform Configuration</p>
+            <p className="text-xs font-medium text-gray-300">Platform Configuration</p>
           </div>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-8">
+        <div className="bg-gray-800 rounded-lg shadow-xl border border-gray-700 p-8">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
+              <div className="bg-red-900/30 border border-red-600/50 rounded-lg p-4">
                 <div className="flex items-center">
                   <ExclamationCircleIcon className="h-5 w-5 text-red-400 mr-3" />
-                  <p className="text-sm text-red-300">{error}</p>
+                  <p className="text-sm text-red-200">{error}</p>
                 </div>
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                <UserIcon className="w-4 h-4 inline mr-1" />
                 Superadmin Email
               </label>
               <input
@@ -155,13 +151,14 @@ export default function SuperadminLogin() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 placeholder="Enter your superadmin email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+                <LockClosedIcon className="w-4 h-4 inline mr-1" />
                 Password
               </label>
               <div className="relative">
@@ -173,7 +170,7 @@ export default function SuperadminLogin() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 pr-12 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+                  className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="Enter your password"
                 />
                 <button
@@ -194,7 +191,7 @@ export default function SuperadminLogin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {loading ? (
                   <>
@@ -216,25 +213,25 @@ export default function SuperadminLogin() {
             <div className="text-center">
               <Link
                 href="/auth/forgot-password"
-                className="text-sm text-purple-300 hover:text-purple-200 transition-colors"
+                className="text-sm text-gray-400 hover:text-gray-300"
               >
                 Forgot your password?
               </Link>
             </div>
             
-            <div className="border-t border-white/20 pt-4">
+            <div className="border-t border-gray-700 pt-4">
               <p className="text-center text-sm text-gray-400">
                 Not a superadmin?{' '}
                 <Link
                   href="/auth/login"
-                  className="text-purple-300 hover:text-purple-200 font-medium transition-colors"
+                  className="text-blue-400 hover:text-blue-300 font-medium"
                 >
                   Regular Login
                 </Link>
                 {' | '}
                 <Link
                   href="/auth/request-access"
-                  className="text-purple-300 hover:text-purple-200 font-medium transition-colors"
+                  className="text-blue-400 hover:text-blue-300 font-medium"
                 >
                   Request Access
                 </Link>
