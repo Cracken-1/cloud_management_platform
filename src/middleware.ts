@@ -1,169 +1,76 @@
-import { createServerClient } from '@supabase/ssr';
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getDemoSession, isValidDemoSession } from '@/lib/auth/demo-session';
 
-export async function middleware(req: NextRequest) {
-  // Skip middleware during build time if environment variables are not available
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  
-  if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('placeholder')) {
-    return NextResponse.next();
-  }
-
-  let res = NextResponse.next({
-    request: {
-      headers: req.headers,
-    },
-  });
-
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseAnonKey,
-    {
-      cookies: {
-        getAll() {
-          return req.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => req.cookies.set(name, value));
-          res = NextResponse.next({
-            request: {
-              headers: req.headers,
-            },
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            res.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
+export async function middleware(request: NextRequest) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req: request, res });
 
   // Refresh session if expired - required for Server Components
   const {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const { pathname } = req.nextUrl;
-
-  // Public routes that don't require authentication
-  const publicRoutes = [
-    '/',
-    '/demo',
-    '/auth/login',
-    '/auth/register',
-    '/auth/forgot-password',
-    '/api/auth/callback'
-  ];
-
-  // API routes that don't require authentication
-  const publicApiRoutes = [
-    '/api/auth/callback',
-    '/api/auth/mock-login',
-    '/api/registration/submit'
-  ];
-
-  // Check if the current path is public
-  const isPublicRoute = publicRoutes.includes(pathname);
-  const isPublicApiRoute = publicApiRoutes.some(route => pathname.startsWith(route));
-
-  // If it's a public route, allow access
-  if (isPublicRoute || isPublicApiRoute) {
-    return res;
-  }
-
-  // Check for demo session if no regular session
-  if (!session) {
-    const demoSession = getDemoSession(req);
-    
-    if (isValidDemoSession(demoSession)) {
-      // Allow demo access to admin routes
-      const requestHeaders = new Headers(req.headers);
-      requestHeaders.set('x-demo-session', 'true');
-      requestHeaders.set('x-demo-company', demoSession!.companyId);
-      requestHeaders.set('x-demo-name', demoSession!.companyName);
-      
-      return NextResponse.next({
-        request: {
-          headers: requestHeaders,
-        },
-      });
+  // Protect superadmin routes
+  if (request.nextUrl.pathname.startsWith('/superadmin')) {
+    // Allow registration page if no superadmin exists
+    if (request.nextUrl.pathname === '/superadmin/register') {
+      return res;
     }
-    
-    // No session and no valid demo session, redirect to login
-    const redirectUrl = new URL('/auth/login', req.url);
-    redirectUrl.searchParams.set('redirectTo', pathname);
-    return NextResponse.redirect(redirectUrl);
+
+    // Require authentication for other superadmin routes
+    if (!session) {
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
+
+    // Check if user has superadmin role
+    try {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('role, is_active')
+        .eq('id', session.user.id)
+        .single();
+
+      if (!profile || profile.role !== 'SUPERADMIN' || !profile.is_active) {
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
+    } catch (error) {
+      console.error('Middleware auth check error:', error);
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
   }
 
-  // Get user profile to check role and verification status
-  const { data: profile } = await supabase
-    .from('user_profiles')
-    .select('role, is_active, is_verified, tenant_id')
-    .eq('id', session.user.id)
-    .single();
+  // Protect admin routes
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    if (!session) {
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
 
-  // If no profile found, redirect to login
-  if (!profile) {
-    const redirectUrl = new URL('/auth/login', req.url);
-    redirectUrl.searchParams.set('error', 'profile_not_found');
-    return NextResponse.redirect(redirectUrl);
+    // Check if user has admin role
+    try {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('role, is_active')
+        .eq('id', session.user.id)
+        .single();
+
+      if (!profile || !['ADMIN', 'SUPERADMIN'].includes(profile.role) || !profile.is_active) {
+        return NextResponse.redirect(new URL('/auth/login', request.url));
+      }
+    } catch (error) {
+      console.error('Middleware auth check error:', error);
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
   }
 
-  // If user is not active, redirect to login with error
-  if (!profile.is_active) {
-    const redirectUrl = new URL('/auth/login', req.url);
-    redirectUrl.searchParams.set('error', 'account_deactivated');
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  // If user is not verified, redirect to login with error
-  if (!profile.is_verified) {
-    const redirectUrl = new URL('/auth/login', req.url);
-    redirectUrl.searchParams.set('error', 'account_not_verified');
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  // Role-based route protection
-  const adminRoutes = ['/admin'];
-  const superadminRoutes = ['/admin/superadmin', '/admin/system', '/admin/tenants'];
-
-  // Check if trying to access admin routes
-  const isAdminRoute = adminRoutes.some(route => pathname.startsWith(route));
-  const isSuperadminRoute = superadminRoutes.some(route => pathname.startsWith(route));
-
-  if (isSuperadminRoute && profile.role !== 'SUPERADMIN') {
-    return NextResponse.redirect(new URL('/admin', req.url));
-  }
-
-  if (isAdminRoute && !['SUPERADMIN', 'ADMIN', 'STORE_MANAGER', 'CUSTOMER_SERVICE', 'INVENTORY_MANAGER', 'ANALYTICS_VIEWER', 'FRANCHISE_MANAGER'].includes(profile.role)) {
-    return NextResponse.redirect(new URL('/auth/login', req.url));
-  }
-
-  // Add user info to headers for use in components
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set('x-user-id', session.user.id);
-  requestHeaders.set('x-user-role', profile.role);
-  requestHeaders.set('x-user-tenant', profile.tenant_id || '');
-
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  return res;
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/superadmin/:path*',
+    '/admin/:path*',
+    '/api/superadmin/:path*',
+    '/api/admin/:path*'
   ],
 };

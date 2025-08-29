@@ -1,0 +1,325 @@
+export interface Database {
+  public: {
+    Tables: {
+      tenants: {
+        Row: {
+          id: string;
+          domain: string;
+          company_name: string;
+          industry: string | null;
+          website_url: string | null;
+          subscription_tier: string;
+          status: string;
+          created_at: string;
+          updated_at: string;
+          branding: any;
+          features: any;
+          dashboard_layout: string;
+          settings: any;
+          billing_email: string | null;
+          billing_address: any;
+          user_limit: number;
+          storage_limit_gb: number;
+          api_calls_limit: number;
+        };
+        Insert: {
+          id?: string;
+          domain: string;
+          company_name: string;
+          industry?: string | null;
+          website_url?: string | null;
+          subscription_tier?: string;
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+          branding?: any;
+          features?: any;
+          dashboard_layout?: string;
+          settings?: any;
+          billing_email?: string | null;
+          billing_address?: any;
+          user_limit?: number;
+          storage_limit_gb?: number;
+          api_calls_limit?: number;
+        };
+        Update: {
+          id?: string;
+          domain?: string;
+          company_name?: string;
+          industry?: string | null;
+          website_url?: string | null;
+          subscription_tier?: string;
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+          branding?: any;
+          features?: any;
+          dashboard_layout?: string;
+          settings?: any;
+          billing_email?: string | null;
+          billing_address?: any;
+          user_limit?: number;
+          storage_limit_gb?: number;
+          api_calls_limit?: number;
+        };
+      };
+      user_profiles: {
+        Row: {
+          id: string;
+          email: string;
+          first_name: string | null;
+          last_name: string | null;
+          full_name: string | null;
+          role: string;
+          avatar_url: string | null;
+          phone_number: string | null;
+          timezone: string;
+          language: string;
+          is_active: boolean;
+          is_verified: boolean;
+          email_verified_at: string | null;
+          created_at: string;
+          updated_at: string;
+          created_by: string | null;
+          last_login_at: string | null;
+          permissions: any;
+          preferences: any;
+        };
+        Insert: {
+          id: string;
+          email: string;
+          first_name?: string | null;
+          last_name?: string | null;
+          role?: string;
+          avatar_url?: string | null;
+          phone_number?: string | null;
+          timezone?: string;
+          language?: string;
+          is_active?: boolean;
+          is_verified?: boolean;
+          email_verified_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          created_by?: string | null;
+          last_login_at?: string | null;
+          permissions?: any;
+          preferences?: any;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          first_name?: string | null;
+          last_name?: string | null;
+          role?: string;
+          avatar_url?: string | null;
+          phone_number?: string | null;
+          timezone?: string;
+          language?: string;
+          is_active?: boolean;
+          is_verified?: boolean;
+          email_verified_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+          created_by?: string | null;
+          last_login_at?: string | null;
+          permissions?: any;
+          preferences?: any;
+        };
+      };
+      user_tenant_roles: {
+        Row: {
+          id: string;
+          user_id: string;
+          tenant_id: string;
+          role: string;
+          permissions: any;
+          granted_by: string | null;
+          granted_at: string;
+          revoked_at: string | null;
+          is_active: boolean;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          tenant_id: string;
+          role?: string;
+          permissions?: any;
+          granted_by?: string | null;
+          granted_at?: string;
+          revoked_at?: string | null;
+          is_active?: boolean;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          tenant_id?: string;
+          role?: string;
+          permissions?: any;
+          granted_by?: string | null;
+          granted_at?: string;
+          revoked_at?: string | null;
+          is_active?: boolean;
+        };
+      };
+      platform_settings: {
+        Row: {
+          id: string;
+          settings: any;
+          created_by: string | null;
+          updated_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          settings: any;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          settings?: any;
+          created_by?: string | null;
+          updated_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      registration_requests: {
+        Row: {
+          id: string;
+          email: string;
+          first_name: string;
+          last_name: string;
+          company: string;
+          business_type: string | null;
+          phone_number: string | null;
+          business_registration_number: string | null;
+          tax_id: string | null;
+          business_address: string | null;
+          requested_role: string;
+          business_description: string | null;
+          estimated_monthly_volume: string | null;
+          referral_source: string | null;
+          status: string;
+          submitted_at: string;
+          reviewed_at: string | null;
+          approved_by: string | null;
+          approved_at: string | null;
+          rejection_reason: string | null;
+          assigned_tenant_id: string | null;
+          assigned_role: string | null;
+          metadata: any;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          first_name: string;
+          last_name: string;
+          company: string;
+          business_type?: string | null;
+          phone_number?: string | null;
+          business_registration_number?: string | null;
+          tax_id?: string | null;
+          business_address?: string | null;
+          requested_role?: string;
+          business_description?: string | null;
+          estimated_monthly_volume?: string | null;
+          referral_source?: string | null;
+          status?: string;
+          submitted_at?: string;
+          reviewed_at?: string | null;
+          approved_by?: string | null;
+          approved_at?: string | null;
+          rejection_reason?: string | null;
+          assigned_tenant_id?: string | null;
+          assigned_role?: string | null;
+          metadata?: any;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          first_name?: string;
+          last_name?: string;
+          company?: string;
+          business_type?: string | null;
+          phone_number?: string | null;
+          business_registration_number?: string | null;
+          tax_id?: string | null;
+          business_address?: string | null;
+          requested_role?: string;
+          business_description?: string | null;
+          estimated_monthly_volume?: string | null;
+          referral_source?: string | null;
+          status?: string;
+          submitted_at?: string;
+          reviewed_at?: string | null;
+          approved_by?: string | null;
+          approved_at?: string | null;
+          rejection_reason?: string | null;
+          assigned_tenant_id?: string | null;
+          assigned_role?: string | null;
+          metadata?: any;
+        };
+      };
+      audit_logs: {
+        Row: {
+          id: string;
+          tenant_id: string | null;
+          user_id: string | null;
+          action: string;
+          resource_type: string;
+          resource_id: string | null;
+          ip_address: string | null;
+          user_agent: string | null;
+          old_values: any;
+          new_values: any;
+          details: string | null;
+          metadata: any;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          tenant_id?: string | null;
+          user_id?: string | null;
+          action: string;
+          resource_type: string;
+          resource_id?: string | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          old_values?: any;
+          new_values?: any;
+          details?: string | null;
+          metadata?: any;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          tenant_id?: string | null;
+          user_id?: string | null;
+          action?: string;
+          resource_type?: string;
+          resource_id?: string | null;
+          ip_address?: string | null;
+          user_agent?: string | null;
+          old_values?: any;
+          new_values?: any;
+          details?: string | null;
+          metadata?: any;
+          created_at?: string;
+        };
+      };
+    };
+    Views: {
+      [_ in never]: never;
+    };
+    Functions: {
+      [_ in never]: never;
+    };
+    Enums: {
+      [_ in never]: never;
+    };
+  };
+}
