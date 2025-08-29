@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { Building2, Mail, Phone, User, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
+import { Building2, Mail, Phone, User as UserIcon, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
+import type { User } from '@supabase/auth-helpers-nextjs';
 
 interface AccessRequestData {
   email: string;
@@ -36,7 +37,7 @@ export default function RequestAccess() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [googleUser, setGoogleUser] = useState<Record<string, unknown> | null>(null);
+  const [googleUser, setGoogleUser] = useState<User | null>(null);
   
   const router = useRouter();
   const supabase = createClientComponentClient();
@@ -241,7 +242,7 @@ export default function RequestAccess() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                <User className="w-4 h-4 inline mr-1" />
+                <UserIcon className="w-4 h-4 inline mr-1" />
                 First Name *
               </label>
               <input
@@ -260,7 +261,7 @@ export default function RequestAccess() {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                <User className="w-4 h-4 inline mr-1" />
+                <UserIcon className="w-4 h-4 inline mr-1" />
                 Last Name *
               </label>
               <input
