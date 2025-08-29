@@ -16,7 +16,8 @@ export async function POST(request: Request) {
       : ['email', 'password', 'firstName', 'lastName', 'organizationName', 'phoneNumber', 'securityCode'];
       
     for (const field of requiredFields) {
-      if (!setupData[field]) {
+      const value = setupData[field as keyof SuperadminSetupRequest];
+      if (!value) {
         return NextResponse.json(
           { success: false, message: `${field} is required` },
           { status: 400 }
