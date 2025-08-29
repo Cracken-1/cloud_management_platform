@@ -63,7 +63,7 @@ export async function superadminMiddleware(request: NextRequest) {
 export function useSuperadminAuth() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<Record<string, unknown> | null>(null);
   
   useEffect(() => {
     checkSuperadminAuth();

@@ -34,7 +34,7 @@ export default function SuperadminRegister() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [step, setStep] = useState(1);
-  const [googleUser, setGoogleUser] = useState<any>(null);
+  const [googleUser, setGoogleUser] = useState<Record<string, unknown> | null>(null);
   
   const router = useRouter();
   const supabase = createClientComponentClient();
@@ -74,8 +74,8 @@ export default function SuperadminRegister() {
       });
       
       if (error) throw error;
-    } catch (error: any) {
-      setErrors({ google: error.message });
+    } catch (error) {
+      setErrors({ google: error instanceof Error ? error.message : 'Google sign-in failed' });
     } finally {
       setGoogleLoading(false);
     }
@@ -152,8 +152,8 @@ export default function SuperadminRegister() {
       } else {
         setErrors({ submit: result.message });
       }
-    } catch (error: any) {
-      setErrors({ submit: error.message || 'Registration failed' });
+    } catch (error) {
+      setErrors({ submit: error instanceof Error ? error.message : 'Registration failed' });
     } finally {
       setLoading(false);
     }

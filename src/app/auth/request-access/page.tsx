@@ -36,7 +36,7 @@ export default function RequestAccess() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
-  const [googleUser, setGoogleUser] = useState<any>(null);
+  const [googleUser, setGoogleUser] = useState<Record<string, unknown> | null>(null);
   
   const router = useRouter();
   const supabase = createClientComponentClient();
@@ -76,8 +76,8 @@ export default function RequestAccess() {
       });
       
       if (error) throw error;
-    } catch (error: any) {
-      setErrors({ google: error.message });
+    } catch (error) {
+      setErrors({ google: error instanceof Error ? error.message : 'Google sign-in failed' });
     } finally {
       setGoogleLoading(false);
     }
@@ -132,8 +132,8 @@ export default function RequestAccess() {
       } else {
         setErrors({ submit: result.message });
       }
-    } catch (error: any) {
-      setErrors({ submit: error.message || 'Request failed' });
+    } catch (error) {
+      setErrors({ submit: error instanceof Error ? error.message : 'Request failed' });
     } finally {
       setLoading(false);
     }
@@ -164,7 +164,7 @@ export default function RequestAccess() {
           
           <div className="bg-blue-50 rounded-lg p-4 mb-6">
             <p className="text-sm text-blue-800">
-              <strong>What's next?</strong><br />
+              <strong>What&apos;s next?</strong><br />
               Our team will review your application and contact you at <strong>{formData.email}</strong> with further instructions.
             </p>
           </div>

@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Tenants API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -277,7 +277,7 @@ export async function POST(request: NextRequest) {
       }
     }, { status: 201 });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Create tenant API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

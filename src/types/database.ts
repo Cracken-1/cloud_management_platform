@@ -12,12 +12,12 @@ export interface Database {
           status: string;
           created_at: string;
           updated_at: string;
-          branding: any;
-          features: any;
+          branding: Record<string, unknown>;
+          features: Record<string, unknown>;
           dashboard_layout: string;
-          settings: any;
+          settings: Record<string, unknown>;
           billing_email: string | null;
-          billing_address: any;
+          billing_address: Record<string, unknown> | null;
           user_limit: number;
           storage_limit_gb: number;
           api_calls_limit: number;
@@ -32,12 +32,12 @@ export interface Database {
           status?: string;
           created_at?: string;
           updated_at?: string;
-          branding?: any;
-          features?: any;
+          branding?: Record<string, unknown>;
+          features?: Record<string, unknown>;
           dashboard_layout?: string;
-          settings?: any;
+          settings?: Record<string, unknown>;
           billing_email?: string | null;
-          billing_address?: any;
+          billing_address?: Record<string, unknown> | null;
           user_limit?: number;
           storage_limit_gb?: number;
           api_calls_limit?: number;
@@ -52,12 +52,12 @@ export interface Database {
           status?: string;
           created_at?: string;
           updated_at?: string;
-          branding?: any;
-          features?: any;
+          branding?: Record<string, unknown>;
+          features?: Record<string, unknown>;
           dashboard_layout?: string;
-          settings?: any;
+          settings?: Record<string, unknown>;
           billing_email?: string | null;
-          billing_address?: any;
+          billing_address?: Record<string, unknown> | null;
           user_limit?: number;
           storage_limit_gb?: number;
           api_calls_limit?: number;
@@ -82,8 +82,8 @@ export interface Database {
           updated_at: string;
           created_by: string | null;
           last_login_at: string | null;
-          permissions: any;
-          preferences: any;
+          permissions: Record<string, unknown>;
+          preferences: Record<string, unknown>;
         };
         Insert: {
           id: string;
@@ -102,8 +102,8 @@ export interface Database {
           updated_at?: string;
           created_by?: string | null;
           last_login_at?: string | null;
-          permissions?: any;
-          preferences?: any;
+          permissions?: Record<string, unknown>;
+          preferences?: Record<string, unknown>;
         };
         Update: {
           id?: string;
@@ -122,8 +122,8 @@ export interface Database {
           updated_at?: string;
           created_by?: string | null;
           last_login_at?: string | null;
-          permissions?: any;
-          preferences?: any;
+          permissions?: Record<string, unknown>;
+          preferences?: Record<string, unknown>;
         };
       };
       user_tenant_roles: {
@@ -132,7 +132,7 @@ export interface Database {
           user_id: string;
           tenant_id: string;
           role: string;
-          permissions: any;
+          permissions: Record<string, unknown>;
           granted_by: string | null;
           granted_at: string;
           revoked_at: string | null;
@@ -143,7 +143,7 @@ export interface Database {
           user_id: string;
           tenant_id: string;
           role?: string;
-          permissions?: any;
+          permissions?: Record<string, unknown>;
           granted_by?: string | null;
           granted_at?: string;
           revoked_at?: string | null;
@@ -154,7 +154,7 @@ export interface Database {
           user_id?: string;
           tenant_id?: string;
           role?: string;
-          permissions?: any;
+          permissions?: Record<string, unknown>;
           granted_by?: string | null;
           granted_at?: string;
           revoked_at?: string | null;
@@ -164,7 +164,7 @@ export interface Database {
       platform_settings: {
         Row: {
           id: string;
-          settings: any;
+          settings: Record<string, unknown>;
           created_by: string | null;
           updated_by: string | null;
           created_at: string;
@@ -172,7 +172,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          settings: any;
+          settings: Record<string, unknown>;
           created_by?: string | null;
           updated_by?: string | null;
           created_at?: string;
@@ -180,7 +180,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          settings?: any;
+          settings?: Record<string, unknown>;
           created_by?: string | null;
           updated_by?: string | null;
           created_at?: string;
@@ -211,7 +211,7 @@ export interface Database {
           rejection_reason: string | null;
           assigned_tenant_id: string | null;
           assigned_role: string | null;
-          metadata: any;
+          metadata: Record<string, unknown>;
         };
         Insert: {
           id?: string;
@@ -236,7 +236,7 @@ export interface Database {
           rejection_reason?: string | null;
           assigned_tenant_id?: string | null;
           assigned_role?: string | null;
-          metadata?: any;
+          metadata?: Record<string, unknown>;
         };
         Update: {
           id?: string;
@@ -261,7 +261,7 @@ export interface Database {
           rejection_reason?: string | null;
           assigned_tenant_id?: string | null;
           assigned_role?: string | null;
-          metadata?: any;
+          metadata?: Record<string, unknown>;
         };
       };
       audit_logs: {
@@ -274,10 +274,10 @@ export interface Database {
           resource_id: string | null;
           ip_address: string | null;
           user_agent: string | null;
-          old_values: any;
-          new_values: any;
+          old_values: Record<string, unknown> | null;
+          new_values: Record<string, unknown> | null;
           details: string | null;
-          metadata: any;
+          metadata: Record<string, unknown>;
           created_at: string;
         };
         Insert: {
@@ -289,10 +289,10 @@ export interface Database {
           resource_id?: string | null;
           ip_address?: string | null;
           user_agent?: string | null;
-          old_values?: any;
-          new_values?: any;
+          old_values?: Record<string, unknown> | null;
+          new_values?: Record<string, unknown> | null;
           details?: string | null;
-          metadata?: any;
+          metadata?: Record<string, unknown>;
           created_at?: string;
         };
         Update: {
@@ -304,10 +304,10 @@ export interface Database {
           resource_id?: string | null;
           ip_address?: string | null;
           user_agent?: string | null;
-          old_values?: any;
-          new_values?: any;
+          old_values?: Record<string, unknown> | null;
+          new_values?: Record<string, unknown> | null;
           details?: string | null;
-          metadata?: any;
+          metadata?: Record<string, unknown>;
           created_at?: string;
         };
       };

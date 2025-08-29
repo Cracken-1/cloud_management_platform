@@ -26,13 +26,13 @@ export async function POST(request: Request) {
       status: result.success ? 200 : 400 
     });
     
-  } catch (error: any) {
+  } catch (error) {
     console.error('Superadmin setup API error:', error);
     return NextResponse.json(
       { 
         success: false, 
         message: 'Internal server error',
-        error: error.message 
+        error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
     );

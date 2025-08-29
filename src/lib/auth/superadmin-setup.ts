@@ -16,7 +16,7 @@ export interface SetupResult {
     message: string;
     userId?: string;
     tenantId?: string;
-    error?: any;
+    error?: Error;
 }
 
 export class SuperadminSetup {
@@ -133,7 +133,6 @@ export class SuperadminSetup {
                 };
             }
 
-            let authData: any;
             let userId: string;
 
             if (setupData.isGoogleAuth && setupData.googleUserId) {
@@ -145,7 +144,6 @@ export class SuperadminSetup {
                         message: 'Google authentication session not found or invalid'
                     };
                 }
-                authData = { user: session.user };
                 userId = session.user.id;
             } else {
                 // Create user with email/password
@@ -177,7 +175,6 @@ export class SuperadminSetup {
                     };
                 }
 
-                authData = signUpData;
                 userId = signUpData.user.id;
             }
 
@@ -257,12 +254,12 @@ export class SuperadminSetup {
                 tenantId: tenantId
             };
 
-        } catch (error: any) {
+        } catch (error) {
             console.error('Superadmin setup error:', error);
             return {
                 success: false,
-                message: error.message || 'An unexpected error occurred during setup',
-                error
+                message: error instanceof Error ? error.message : 'An unexpected error occurred during setup',
+                error: error instanceof Error ? error : new Error('Unknown error')
             };
         }
     }
@@ -346,7 +343,7 @@ export class SuperadminSetup {
         action: string;
         resource_type: string;
         resource_id: string;
-        details: any;
+        details: Record<string, unknown>;
     }): Promise<void> {
         try {
             await this.supabase
@@ -394,7 +391,7 @@ export class SuperadminSetup {
     /**
      * Gets superadmin profile information
      */
-    async getSuperadminProfile(userId: string): Promise<any> {
+    async getSuperadminProfile(userId: string): Promise<Record<string, unknown> | null> {
         try {
             const { data: profile, error } = await this.supabase
                 .from('user_profiles')
@@ -426,7 +423,7 @@ export class SuperadminSetup {
         first_name: string;
         last_name: string;
         phone_number: string;
-        preferences: any;
+        preferences: Record<string, unknown>;
     }>): Promise<SetupResult> {
         try {
             const { error } = await this.supabase
@@ -452,11 +449,11 @@ export class SuperadminSetup {
                 success: true,
                 message: 'Profile updated successfully'
             };
-        } catch (error: any) {
+        } catch (error) {
             return {
                 success: false,
-                message: error.message || 'Failed to update profile',
-                error
+                message: error instanceof Error ? error.message : 'Failed to update profile',
+                error: error instanceof Error ? error : new Error('Unknown error')
             };
         }
     }
