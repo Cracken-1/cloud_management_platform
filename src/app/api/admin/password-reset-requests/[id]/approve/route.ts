@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id: requestId } = params;
+    const { id: requestId } = await params;
 
     // Generate temporary password
     const generateTempPassword = () => {

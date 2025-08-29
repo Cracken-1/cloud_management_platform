@@ -102,7 +102,9 @@ export default function AdminDashboard() {
     }
   }, [user, checkTenantSetup]);
 
-  const loadDashboardData = useCallback(async () => {
+  // Load dashboard data on component mount
+  useEffect(() => {
+    const loadData = async () => {
     try {
       // Simulate API calls - replace with actual API endpoints
       const mockStats: DashboardStats = {
@@ -178,6 +180,11 @@ export default function AdminDashboard() {
       console.error('Failed to load dashboard data:', error);
     } finally {
       setLoading(false);
+    }
+    };
+    
+    if (user) {
+      loadData();
     }
   }, [user]);
 

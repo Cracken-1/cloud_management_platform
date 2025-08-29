@@ -83,7 +83,7 @@ export class DynamicPricingEngine {
     }
 
     // 5. Kenya-specific adjustments
-    const kenyaAdjustment = this.applyKenyaMarketFactors(recommendedPrice, data);
+    const kenyaAdjustment = this.applyKenyaMarketFactors(recommendedPrice);
     recommendedPrice = kenyaAdjustment.price;
     reasoning.push(...kenyaAdjustment.reasoning);
 
@@ -232,8 +232,7 @@ export class DynamicPricingEngine {
   }
 
   private applyKenyaMarketFactors(
-    price: number,
-    _data: PricingData
+    price: number
   ): { price: number; reasoning: string[] } {
     const reasoning: string[] = [];
     let adjustedPrice = price;

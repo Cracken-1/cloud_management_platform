@@ -139,7 +139,7 @@ export class AuthService {
       }
 
       // Create registration request
-      const { error: requestError } = await supabase
+      const { data: insertedRequest, error: requestError } = await supabase
         .from('registration_requests')
         .insert({
           email: request.email,
@@ -157,7 +157,9 @@ export class AuthService {
           referral_source: request.referralSource,
           status: 'PENDING',
           submitted_at: new Date().toISOString()
-        });
+        })
+        .select('id')
+        .single();
 
       if (requestError) {
         console.error('Registration request error:', requestError);
@@ -165,7 +167,10 @@ export class AuthService {
       }
 
       // Send notification to superadmins (implement email/Slack notification)
-      await this.notifyAdminsOfNewRequest(request);
+      await this.notifyAdminsOfNewRequest({ 
+        id: insertedRequest.id, 
+        email: request.email 
+      });
 
       return { 
         success: true, 

@@ -269,7 +269,7 @@ export default function TenantDashboard({ tenantId }: TenantDashboardProps) {
         <div className="bg-white rounded-lg shadow p-6">
           <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 gap-3">
-            {getIndustrySpecificActions(tenantConfig.industry, tenantConfig.branding.primaryColor).map((action, index) => (
+            {getIndustrySpecificActions(tenantConfig.industry).map((action, index) => (
               <button
                 key={index}
                 className="p-3 text-left rounded-lg border-2 border-gray-200 hover:border-current transition-colors"
@@ -319,7 +319,7 @@ function getIndustrySpecificActivity(industry: string): string[] {
   }
 }
 
-function getIndustrySpecificActions(industry: string, _primaryColor: string) {
+function getIndustrySpecificActions(industry: string) {
   const baseActions = [
     { title: 'View Reports', description: 'Generate analytics' },
     { title: 'Manage Users', description: 'User administration' }

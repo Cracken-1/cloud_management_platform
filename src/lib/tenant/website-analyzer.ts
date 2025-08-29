@@ -72,7 +72,7 @@ export class WebsiteAnalyzer {
       return this.simulateWebsiteAnalysis(url);
     } catch (error) {
       console.error('Website analysis failed:', error);
-      return this.getDefaultAnalysis(url);
+      return this.getDefaultAnalysis();
     }
   }
 
@@ -187,7 +187,7 @@ export class WebsiteAnalyzer {
     };
   }
 
-  private getDefaultAnalysis(_url: string): WebsiteAnalysis {
+  private getDefaultAnalysis(): WebsiteAnalysis {
     const name = 'Generic Business';
     return {
       companyName: name,

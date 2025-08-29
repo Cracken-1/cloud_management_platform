@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { tenantService } from '@/lib/tenant/tenant-service';
+import Image from 'next/image';
 import type { TenantConfiguration } from '@/lib/tenant/website-analyzer';
 
 interface DynamicDashboardProps {
   tenantId: string;
 }
 
-export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
+export default function DynamicDashboard({ }: DynamicDashboardProps) {
   const [config, setConfig] = useState<TenantConfiguration | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,9 +61,11 @@ export default function DynamicDashboard({ tenantId }: DynamicDashboardProps) {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
               {config.branding.logo && (
-                <img
+                <Image
                   src={config.branding.logo} 
                   alt={`${config.companyName} Logo`}
+                  width={32}
+                  height={32}
                   className="h-8 w-auto mr-3"
                 />
               )}

@@ -85,11 +85,11 @@ export class MPesaService {
   private generateTimestamp(): string {
     const now = new Date();
     return now.getFullYear().toString() +
-           (now.getMonth() + 1).toString().padStart(2, '0') +
-           now.getDate().toString().padStart(2, '0') +
-           now.getHours().toString().padStart(2, '0') +
-           now.getMinutes().toString().padStart(2, '0') +
-           now.getSeconds().toString().padStart(2, '0');
+      (now.getMonth() + 1).toString().padStart(2, '0') +
+      now.getDate().toString().padStart(2, '0') +
+      now.getHours().toString().padStart(2, '0') +
+      now.getMinutes().toString().padStart(2, '0') +
+      now.getSeconds().toString().padStart(2, '0');
   }
 
   private generatePassword(): string {
@@ -101,7 +101,7 @@ export class MPesaService {
   private formatPhoneNumber(phoneNumber: string): string {
     // Convert various formats to 254XXXXXXXXX
     let formatted = phoneNumber.replace(/\D/g, ''); // Remove non-digits
-    
+
     if (formatted.startsWith('0')) {
       formatted = '254' + formatted.substring(1);
     } else if (formatted.startsWith('7') || formatted.startsWith('1')) {
@@ -109,11 +109,11 @@ export class MPesaService {
     } else if (!formatted.startsWith('254')) {
       throw new Error('Invalid phone number format');
     }
-    
+
     if (formatted.length !== 12) {
       throw new Error('Phone number must be 12 digits including country code');
     }
-    
+
     return formatted;
   }
 
@@ -176,7 +176,7 @@ export class MPesaService {
     return transaction;
   }
 
-  async queryTransactionStatus(_tenantId: string, transactionId: string): Promise<{ success: boolean; data?: any; error?: string }> {
+  async queryTransactionStatus(tenantId: string, transactionId: string): Promise<{ success: boolean; data?: Record<string, unknown>; error?: string }> {
     try {
       const accessToken = await this.getAccessToken();
       const timestamp = this.generateTimestamp();
@@ -216,16 +216,16 @@ export class MPesaService {
     try {
       const body = callbackData.Body as Record<string, unknown>;
       const stkCallback = body?.stkCallback as Record<string, unknown>;
-      
+
       if (!stkCallback) {
         console.error('Invalid callback data:', callbackData);
         return;
       }
-      
+
       const checkoutRequestId = stkCallback.CheckoutRequestID as string;
       const resultCode = stkCallback.ResultCode as number;
       const resultDesc = stkCallback.ResultDesc as string;
-      
+
       // Find transaction in database
       const { data: transaction, error } = await supabase
         .from('mpesa_transactions')
@@ -246,10 +246,11 @@ export class MPesaService {
       if (resultCode === 0) {
         status = 'SUCCESS';
         // Extract M-Pesa receipt number if available
-        const callbackMetadata = (stkCallback.CallbackMetadata as any)?.Item?.find(
-          (item: any) => item.Name === 'MpesaReceiptNumber'
+        const callbackMetadata = (stkCallback.CallbackMetadata as Record<string, unknown>)?.Item as Array<Record<string, unknown>>;
+        const receiptItem = callbackMetadata?.find(
+          (item: Record<string, unknown>) => item.Name === 'MpesaReceiptNumber'
         );
-        mpesaReceiptNumber = callbackMetadata?.Value || null;
+        mpesaReceiptNumber = receiptItem?.Value as string || null;
       }
 
       // Update transaction in database
@@ -276,7 +277,7 @@ export class MPesaService {
     }
   }
 
-  async processPayment(amount: number, phoneNumber: string, _tenantId: string): Promise<{ success: boolean; data?: any; error?: string }> {
+  async processPayment(amount: number, phoneNumber: string, tenantId: string): Promise<Record<string, unknown>> {
     const accessToken = await this.getAccessToken();
 
     const payload = {
@@ -388,10 +389,10 @@ export class MPesaService {
     return (dailyTotal + amount) <= DAILY_LIMIT;
   }
 
-  async suggestOptimalPaymentTiming(_amount: number): Promise<string> {
+  async suggestOptimalPaymentTiming(amount: number): Promise<string> {
     // Suggest best times for M-Pesa transactions based on network load
     const hour = new Date().getHours();
-    
+
     if (hour >= 6 && hour <= 9) {
       return 'Peak morning hours - transaction may be slower';
     } else if (hour >= 17 && hour <= 20) {
