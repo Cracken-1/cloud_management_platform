@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { Eye, EyeOff, Shield, AlertCircle, CheckCircle } from 'lucide-react';
+import type { User } from '@supabase/auth-helpers-nextjs';
 
 interface RegistrationData {
   email: string;
@@ -34,7 +35,7 @@ export default function SuperadminRegister() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [step, setStep] = useState(1);
-  const [googleUser, setGoogleUser] = useState<Record<string, unknown> | null>(null);
+  const [googleUser, setGoogleUser] = useState<User | null>(null);
   
   const router = useRouter();
   const supabase = createClientComponentClient();
