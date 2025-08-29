@@ -10,7 +10,6 @@ import {
   UserIcon,
   LockClosedIcon,
   ArrowRightIcon,
-  BuildingOfficeIcon,
   CloudIcon,
   ShieldCheckIcon,
   ChartBarIcon
@@ -106,14 +105,14 @@ export default function LoginForm() {
       <div className="max-w-md w-full space-y-8">
         {/* Header Section */}
         <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-blue-600 rounded-lg flex items-center justify-center mb-6">
-            <BuildingOfficeIcon className="h-8 w-8 text-white" />
+          <div className="mx-auto mb-6">
+            <img src="/logo.png" alt="InfinityStack" className="h-16 w-16 mx-auto mb-4" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome Back
+            Welcome to InfinityStack
           </h2>
           <p className="text-gray-600 mb-8">
-            Sign in to your cloud management platform
+            Sign in to your enterprise cloud platform
           </p>
         </div>
 
@@ -121,15 +120,15 @@ export default function LoginForm() {
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 text-center">
             <CloudIcon className="h-5 w-5 text-blue-600 mx-auto mb-1" />
-            <p className="text-xs font-medium text-gray-900">Cloud Infrastructure</p>
+            <p className="text-xs font-medium text-gray-900">Enterprise Cloud</p>
           </div>
           <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 text-center">
             <ShieldCheckIcon className="h-5 w-5 text-green-600 mx-auto mb-1" />
-            <p className="text-xs font-medium text-gray-900">Secure Access</p>
+            <p className="text-xs font-medium text-gray-900">SOC 2 Compliant</p>
           </div>
           <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 text-center">
             <ChartBarIcon className="h-5 w-5 text-purple-600 mx-auto mb-1" />
-            <p className="text-xs font-medium text-gray-900">Analytics</p>
+            <p className="text-xs font-medium text-gray-900">AI Analytics</p>
           </div>
           <div className="bg-white rounded-lg p-3 shadow-sm border border-gray-200 text-center">
             <UserIcon className="h-5 w-5 text-orange-600 mx-auto mb-1" />

@@ -110,12 +110,12 @@ function getDemoConfigurations(): Record<string, TenantConfiguration> {
         description: 'Software development and digital transformation consultancy'
       }
     },
-    'cloudflow': {
-      id: 'cloudflow',
-      domain: 'cloudflow.demo',
-      companyName: 'CloudFlow E-commerce',
-      industry: 'ecommerce',
-      websiteUrl: 'https://cloudflow-ecommerce.com',
+    'infinitystack': {
+      id: 'infinitystack',
+      domain: 'infinitystack.demo',
+      companyName: 'InfinityStack Demo',
+      industry: 'enterprise',
+      websiteUrl: 'https://infinitystack.com',
       branding: {
         primaryColor: '#059669',
         secondaryColor: '#0D9488',

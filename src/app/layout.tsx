@@ -6,8 +6,11 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Adaptive Cloud Management Platform',
-  description: 'Advanced administrative system for multi-tenant cloud management with AI-powered features',
+  title: 'InfinityStack - Enterprise Cloud Platform',
+  description: 'Scalable, secure, and intelligent cloud management platform designed for enterprise operations. Multi-tenant architecture with advanced analytics and enterprise-grade security.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({

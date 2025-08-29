@@ -26,11 +26,11 @@ const mockCompanies = {
     websiteUrl: 'https://digitalsoftware.com',
     adminEmail: 'admin@digitalsolutions.com'
   },
-  'cloudflow': {
-    name: 'CloudFlow E-commerce',
-    industry: 'ecommerce',
-    websiteUrl: 'https://cloudflow-ecommerce.com',
-    adminEmail: 'admin@cloudflow.com'
+  'infinitystack': {
+    name: 'InfinityStack Demo',
+    industry: 'enterprise',
+    websiteUrl: 'https://infinitystack.com',
+    adminEmail: 'admin@infinitystack.com'
   }
 };
 

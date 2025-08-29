@@ -1,6 +1,6 @@
-# 🚀 Adaptive Cloud Management Platform
+# 🚀 InfinityStack - Enterprise Cloud Platform
 
-A production-ready, multi-tenant SaaS platform built with Next.js 15, TypeScript, Tailwind CSS, and Supabase. Designed for enterprise-grade security, scalability, and customization.
+A production-ready, multi-tenant enterprise cloud platform built with Next.js 15, TypeScript, Tailwind CSS, and Supabase. Designed for enterprise-grade security, scalability, and intelligent operations management.
 
 ## ✨ Features
 
@@ -80,6 +80,21 @@ src/
 └── types/                 # TypeScript type definitions
 ```
 
+## 🔐 Superadmin Access Control
+
+### Authorized Superadmin Emails
+For security, superadmin access is restricted to pre-authorized email addresses. To add authorized emails:
+
+1. Edit `src/lib/auth/superadmin-access.ts`
+2. Add email addresses to the `AUTHORIZED_SUPERADMIN_EMAILS` array
+3. In production, consider using environment variables for this list
+
+### Authentication Flow Fixes
+- ✅ **Google OAuth redirect fixed**: Now properly redirects to `/admin` or `/superadmin/dashboard` based on user role
+- ✅ **Superadmin access restriction**: Only authorized emails can access superadmin login
+- ✅ **Role-based redirects**: Users are automatically redirected to appropriate dashboards
+- ✅ **Unauthorized access prevention**: Regular users cannot access superadmin portal
+
 ## 🔧 Configuration
 
 ### Environment Variables
@@ -94,7 +109,7 @@ NEXT_PUBLIC_SUPERADMIN_CODE=YourSecureCode2024!
 
 # Application
 NODE_ENV=production
-NEXT_PUBLIC_APP_NAME=Adaptive Cloud Management Platform
+NEXT_PUBLIC_APP_NAME=InfinityStack Enterprise Platform
 ```
 
 ### Supabase Setup
