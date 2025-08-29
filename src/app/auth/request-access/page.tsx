@@ -70,7 +70,7 @@ export default function RequestAccess() {
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
-            hd: '', // Allow any domain, but we'll validate corporate emails
+            hd: '', // Allow any domain, but we will validate corporate emails
           }
         }
       });
