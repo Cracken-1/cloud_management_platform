@@ -31,64 +31,51 @@ const staggerContainer = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-emerald-900 to-teal-900 overflow-hidden">
-      {/* Animated Background Elements */}
+    <div className="min-h-screen bg-white overflow-hidden">
+      {/* Subtle Background Pattern */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div 
-          className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360]
-          }}
-          transition={{ 
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div 
-          className="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0]
-          }}
-          transition={{ 
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white to-gray-50/50" />
+        <div className="absolute top-0 left-0 w-full h-full opacity-[0.02]">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+                <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#000" strokeWidth="1"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
+        </div>
       </div>
 
       {/* Navigation */}
       <motion.nav 
-        className="relative bg-white/5 backdrop-blur-xl border-b border-white/10"
+        className="relative bg-white/80 backdrop-blur-xl border-b border-gray-200/50"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+          <div className="flex justify-between items-center h-16">
             <motion.div 
               className="flex items-center"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.02 }}
             >
-              <div className="h-10 w-10 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl flex items-center justify-center mr-3">
-                <CloudIcon className="h-6 w-6 text-white" />
+              <div className="h-8 w-8 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg flex items-center justify-center mr-3">
+                <CloudIcon className="h-5 w-5 text-white" />
               </div>
-              <span className="text-white text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+              <span className="text-gray-900 text-xl font-semibold">
                 InfinityStack
               </span>
             </motion.div>
-            <div className="flex space-x-6">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/admin/login" className="text-white/80 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                  Admin Portal
+            <div className="flex items-center space-x-4">
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Link href="/admin/login" className="text-gray-600 hover:text-gray-900 px-4 py-2 text-sm font-medium transition-colors">
+                  Sign In
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="/superadmin/login" className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-2 rounded-lg text-sm font-medium shadow-lg transition-all">
-                  Platform Admin
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <Link href="/superadmin/login" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                  Admin Console
                 </Link>
               </motion.div>
             </div>
@@ -98,7 +85,7 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <div className="relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <motion.div 
             className="text-center"
             variants={staggerContainer}
@@ -106,43 +93,42 @@ export default function HomePage() {
             animate="animate"
           >
             <motion.div variants={fadeInUp}>
-              <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 leading-tight">
-                Enterprise Cloud
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400">
-                  Infrastructure
+              <h1 className="text-4xl md:text-6xl font-light text-gray-900 mb-6 leading-tight">
+                Enterprise Cloud Platform
+                <span className="block text-3xl md:text-5xl font-normal text-blue-600 mt-2">
+                  Built for Scale
                 </span>
-                <span className="block text-5xl md:text-7xl">Reimagined</span>
               </h1>
             </motion.div>
             
             <motion.p 
-              className="text-xl text-white/90 mb-12 max-w-4xl mx-auto leading-relaxed"
+              className="text-lg text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed"
               variants={fadeInUp}
             >
-              Transform your business with our next-generation cloud management platform. 
-              Built for enterprise scale, designed for simplicity, secured by design.
+              Secure, scalable, and intelligent cloud infrastructure management. 
+              Trusted by enterprises worldwide for mission-critical workloads.
             </motion.p>
             
             <motion.div 
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
               variants={fadeInUp}
             >
               <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(16, 185, 129, 0.3)" }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <Link href="/access/request" className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-10 py-4 rounded-xl text-lg font-semibold flex items-center shadow-2xl transition-all">
-                  Start Your Journey
-                  <ArrowRightIcon className="ml-3 h-5 w-5" />
+                <Link href="/access/request" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg text-base font-medium flex items-center transition-colors">
+                  Get Started
+                  <ArrowRightIcon className="ml-2 h-4 w-4" />
                 </Link>
               </motion.div>
               
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <Link href="/admin/login" className="bg-white/10 hover:bg-white/20 text-white px-10 py-4 rounded-xl text-lg font-semibold backdrop-blur-sm border border-white/20 transition-all">
-                  Access Portal
+                <Link href="/admin/login" className="border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-8 py-3 rounded-lg text-base font-medium transition-colors">
+                  Sign In
                 </Link>
               </motion.div>
             </motion.div>
@@ -152,13 +138,13 @@ export default function HomePage() {
 
       {/* Stats Section */}
       <motion.div 
-        className="relative bg-white/5 backdrop-blur-xl border-y border-white/10"
+        className="relative bg-gray-50/50 border-y border-gray-200/50"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.div 
             className="grid grid-cols-2 md:grid-cols-4 gap-8"
             variants={staggerContainer}
@@ -176,11 +162,10 @@ export default function HomePage() {
                 key={index}
                 className="text-center group"
                 variants={fadeInUp}
-                whileHover={{ scale: 1.05 }}
               >
-                <stat.icon className="h-8 w-8 text-emerald-400 mx-auto mb-4 group-hover:text-teal-400 transition-colors" />
-                <div className="text-4xl font-bold text-white mb-2">{stat.number}</div>
-                <div className="text-white/70 font-medium">{stat.label}</div>
+                <stat.icon className="h-6 w-6 text-blue-600 mx-auto mb-3" />
+                <div className="text-2xl font-semibold text-gray-900 mb-1">{stat.number}</div>
+                <div className="text-gray-600 text-sm font-medium">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -188,28 +173,25 @@ export default function HomePage() {
       </motion.div>
 
       {/* Features Grid */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <motion.div 
-          className="text-center mb-20"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-5xl font-bold text-white mb-6">
-            Enterprise-Grade
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-              Capabilities
-            </span>
+          <h2 className="text-3xl font-light text-gray-900 mb-4">
+            Enterprise-Grade Capabilities
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Comprehensive cloud infrastructure management with advanced security, 
             scalability, and intelligent automation.
           </p>
         </motion.div>
         
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={staggerContainer}
           initial="initial"
           whileInView="animate"
@@ -219,54 +201,47 @@ export default function HomePage() {
             {
               icon: CloudIcon,
               title: "Multi-Tenant Architecture",
-              description: "Secure tenant isolation with customizable branding, role-based access control, and scalable infrastructure.",
-              color: "from-emerald-500 to-teal-500"
+              description: "Secure tenant isolation with customizable branding and role-based access control."
             },
             {
               icon: ShieldCheckIcon,
-              title: "Zero-Trust Security",
-              description: "Enterprise-grade security with SOC 2 compliance, comprehensive audit logging, and advanced threat protection.",
-              color: "from-teal-500 to-cyan-500"
+              title: "Enterprise Security",
+              description: "SOC 2 compliance, comprehensive audit logging, and advanced threat protection."
             },
             {
               icon: ChartBarIcon,
-              title: "AI-Powered Analytics",
-              description: "Advanced analytics and reporting with machine learning insights, predictive scaling, and performance optimization.",
-              color: "from-cyan-500 to-blue-500"
+              title: "Advanced Analytics",
+              description: "Machine learning insights, predictive scaling, and performance optimization."
             },
             {
               icon: UsersIcon,
               title: "Identity Management",
-              description: "Comprehensive user lifecycle management with automated provisioning, SSO integration, and compliance reporting.",
-              color: "from-blue-500 to-indigo-500"
+              description: "Automated provisioning, SSO integration, and compliance reporting."
             },
             {
               icon: ServerIcon,
               title: "Infrastructure Automation",
-              description: "Complete infrastructure management with automated scaling, monitoring, disaster recovery, and cost optimization.",
-              color: "from-indigo-500 to-purple-500"
+              description: "Automated scaling, monitoring, disaster recovery, and cost optimization."
             },
             {
               icon: CpuChipIcon,
               title: "API-First Platform",
-              description: "RESTful APIs with comprehensive documentation, SDK support, webhooks, and real-time event streaming.",
-              color: "from-purple-500 to-pink-500"
+              description: "RESTful APIs with comprehensive documentation and real-time event streaming."
             }
           ].map((feature, index) => (
             <motion.div 
               key={index}
-              className="group relative"
+              className="group"
               variants={fadeInUp}
-              whileHover={{ y: -10 }}
             >
-              <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 h-full">
-                <div className={`h-16 w-16 bg-gradient-to-r ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="h-8 w-8 text-white" />
+              <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow h-full">
+                <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <feature.icon className="h-5 w-5 text-blue-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-white/70 leading-relaxed">
+                <p className="text-gray-600 text-sm leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -277,26 +252,26 @@ export default function HomePage() {
 
       {/* Testimonials */}
       <motion.div 
-        className="relative bg-gradient-to-r from-emerald-900/50 to-teal-900/50 backdrop-blur-xl border-y border-white/10"
+        className="relative bg-gray-50"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <motion.div 
-            className="text-center mb-16"
+            className="text-center mb-12"
             variants={fadeInUp}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-white mb-4">Trusted by Industry Leaders</h2>
-            <p className="text-white/80 text-lg">Join thousands of enterprises transforming their infrastructure</p>
+            <h2 className="text-3xl font-light text-gray-900 mb-4">Trusted by Industry Leaders</h2>
+            <p className="text-gray-600">Join thousands of enterprises transforming their infrastructure</p>
           </motion.div>
           
           <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6"
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -306,37 +281,28 @@ export default function HomePage() {
               {
                 quote: "InfinityStack transformed our cloud operations. 99.99% uptime and incredible scalability.",
                 author: "Sarah Chen",
-                role: "CTO, TechCorp Global",
-                rating: 5
+                role: "CTO, TechCorp Global"
               },
               {
                 quote: "The security features and compliance tools are exactly what we needed for our enterprise.",
                 author: "Michael Rodriguez",
-                role: "CISO, SecureFinance",
-                rating: 5
+                role: "CISO, SecureFinance"
               },
               {
                 quote: "Best-in-class platform with exceptional support. Our deployment time reduced by 80%.",
                 author: "Emily Johnson",
-                role: "VP Engineering, CloudScale",
-                rating: 5
+                role: "VP Engineering, CloudScale"
               }
             ].map((testimonial, index) => (
               <motion.div 
                 key={index}
-                className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20"
+                className="bg-white border border-gray-200 rounded-lg p-6"
                 variants={fadeInUp}
-                whileHover={{ scale: 1.02 }}
               >
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <StarIcon key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-white/90 mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
+                <p className="text-gray-700 mb-4 text-sm italic">&ldquo;{testimonial.quote}&rdquo;</p>
                 <div>
-                  <div className="font-semibold text-white">{testimonial.author}</div>
-                  <div className="text-white/70 text-sm">{testimonial.role}</div>
+                  <div className="font-medium text-gray-900 text-sm">{testimonial.author}</div>
+                  <div className="text-gray-500 text-xs">{testimonial.role}</div>
                 </div>
               </motion.div>
             ))}
@@ -345,54 +311,49 @@ export default function HomePage() {
       </motion.div>
 
       {/* CTA Section */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <motion.div 
-          className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-16 text-center relative overflow-hidden"
-          initial={{ opacity: 0, scale: 0.9 }}
+          className="bg-blue-600 rounded-lg p-12 text-center"
+          initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/90 to-teal-600/90" />
-          <div className="relative">
-            <h2 className="text-5xl font-bold text-white mb-6">
-              Ready to Transform Your Infrastructure?
-            </h2>
-            <p className="text-white/90 text-xl mb-10 max-w-3xl mx-auto">
-              Join the next generation of cloud management. Get started with enterprise-grade 
-              infrastructure that scales with your ambitions.
-            </p>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Link href="/access/request" className="bg-white text-emerald-600 hover:bg-gray-100 px-12 py-4 rounded-xl text-xl font-bold inline-flex items-center shadow-2xl transition-all">
-                Get Enterprise Access
-                <ArrowRightIcon className="ml-3 h-6 w-6" />
-              </Link>
-            </motion.div>
-          </div>
+          <h2 className="text-3xl font-light text-white mb-4">
+            Ready to Transform Your Infrastructure?
+          </h2>
+          <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
+            Join the next generation of cloud management with enterprise-grade infrastructure.
+          </p>
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Link href="/access/request" className="bg-white text-blue-600 hover:bg-gray-50 px-8 py-3 rounded-lg text-base font-medium inline-flex items-center transition-colors">
+              Get Started
+              <ArrowRightIcon className="ml-2 h-4 w-4" />
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
 
       {/* Footer */}
-      <footer className="relative bg-black/20 backdrop-blur-xl border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <footer className="relative bg-white border-t border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center mb-6">
-                <div className="h-10 w-10 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-xl flex items-center justify-center mr-3">
-                  <CloudIcon className="h-6 w-6 text-white" />
+              <div className="flex items-center mb-4">
+                <div className="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                  <CloudIcon className="h-5 w-5 text-white" />
                 </div>
-                <span className="text-white text-2xl font-bold">InfinityStack</span>
+                <span className="text-gray-900 text-xl font-semibold">InfinityStack</span>
               </div>
-              <p className="text-white/70 mb-6 max-w-md">
-                Enterprise cloud management platform designed for scale, security, and performance. 
-                Transform your infrastructure with intelligent automation.
+              <p className="text-gray-600 mb-4 max-w-md text-sm">
+                Enterprise cloud management platform designed for scale, security, and performance.
               </p>
-              <div className="flex space-x-4">
+              <div className="flex space-x-3">
                 {['SOC 2', 'ISO 27001', 'GDPR', 'HIPAA'].map((cert) => (
-                  <div key={cert} className="bg-white/10 px-3 py-1 rounded-lg text-white/80 text-sm">
+                  <div key={cert} className="bg-gray-100 px-2 py-1 rounded text-gray-700 text-xs">
                     {cert}
                   </div>
                 ))}
@@ -400,26 +361,26 @@ export default function HomePage() {
             </div>
             
             <div>
-              <h3 className="text-white font-semibold mb-4">Platform</h3>
-              <ul className="space-y-2 text-white/70">
-                <li><Link href="/admin/login" className="hover:text-white transition-colors">Admin Portal</Link></li>
-                <li><Link href="/access/request" className="hover:text-white transition-colors">Request Access</Link></li>
-                <li><Link href="/superadmin/login" className="hover:text-white transition-colors">Platform Admin</Link></li>
+              <h3 className="text-gray-900 font-medium mb-3 text-sm">Platform</h3>
+              <ul className="space-y-2 text-gray-600 text-sm">
+                <li><Link href="/admin/login" className="hover:text-gray-900 transition-colors">Sign In</Link></li>
+                <li><Link href="/access/request" className="hover:text-gray-900 transition-colors">Request Access</Link></li>
+                <li><Link href="/superadmin/login" className="hover:text-gray-900 transition-colors">Admin Console</Link></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-white font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2 text-white/70">
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+              <h3 className="text-gray-900 font-medium mb-3 text-sm">Legal</h3>
+              <ul className="space-y-2 text-gray-600 text-sm">
+                <li><Link href="/privacy" className="hover:text-gray-900 transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-gray-900 transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-white/20 pt-8 text-center">
-            <p className="text-white/60">
-              © 2024 InfinityStack. All rights reserved. Enterprise Cloud Management Platform.
+          <div className="border-t border-gray-200 pt-6 text-center">
+            <p className="text-gray-500 text-xs">
+              © 2024 InfinityStack. All rights reserved.
             </p>
           </div>
         </div>
