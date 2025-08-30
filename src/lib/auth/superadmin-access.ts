@@ -3,6 +3,7 @@
 const AUTHORIZED_SUPERADMIN_EMAILS = [
   'admin@infinitystack.com',
   'superadmin@infinitystack.com',
+  'alphoncewekesamukaisi@gmail.com',
   // Add more authorized emails as needed
 ];
 
