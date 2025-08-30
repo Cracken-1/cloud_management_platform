@@ -6,60 +6,59 @@ export async function middleware(request: NextRequest) {
   const res = NextResponse.next();
   const supabase = createMiddlewareClient({ req: request, res });
 
-  // Refresh session if expired - required for Server Components
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
 
   // Protect superadmin routes
   if (request.nextUrl.pathname.startsWith('/superadmin')) {
-    // Allow login and registration pages without authentication
-    if (request.nextUrl.pathname === '/superadmin/login' || request.nextUrl.pathname === '/superadmin/register') {
+    // Allow login page
+    if (request.nextUrl.pathname === '/superadmin/login') {
       return res;
     }
 
-    // Require authentication for other superadmin routes
     if (!session) {
       return NextResponse.redirect(new URL('/superadmin/login', request.url));
     }
 
-    // Check if user has superadmin role
+    // Check superadmin role
     try {
       const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('role, is_active')
+        .from('users')
+        .select('role, status')
         .eq('id', session.user.id)
         .single();
 
-      if (!profile || profile.role !== 'SUPERADMIN' || !profile.is_active) {
-        return NextResponse.redirect(new URL('/admin', request.url));
+      if (!profile || profile.role !== 'SUPERADMIN' || profile.status !== 'active') {
+        return NextResponse.redirect(new URL('/superadmin/login', request.url));
       }
     } catch (error) {
-      console.error('Middleware auth check error:', error);
-      return NextResponse.redirect(new URL('/auth/login', request.url));
+      return NextResponse.redirect(new URL('/superadmin/login', request.url));
     }
   }
 
   // Protect admin routes
   if (request.nextUrl.pathname.startsWith('/admin')) {
-    if (!session) {
-      return NextResponse.redirect(new URL('/auth/login', request.url));
+    // Allow login page
+    if (request.nextUrl.pathname === '/admin/login') {
+      return res;
     }
 
-    // Check if user has admin role
+    if (!session) {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
+
+    // Check admin role
     try {
       const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('role, is_active')
+        .from('users')
+        .select('role, status')
         .eq('id', session.user.id)
         .single();
 
-      if (!profile || !['ADMIN', 'SUPERADMIN'].includes(profile.role) || !profile.is_active) {
-        return NextResponse.redirect(new URL('/auth/login', request.url));
+      if (!profile || !['ORG_ADMIN', 'USER', 'SUPERADMIN'].includes(profile.role) || profile.status !== 'active') {
+        return NextResponse.redirect(new URL('/admin/login', request.url));
       }
     } catch (error) {
-      console.error('Middleware auth check error:', error);
-      return NextResponse.redirect(new URL('/auth/login', request.url));
+      return NextResponse.redirect(new URL('/admin/login', request.url));
     }
   }
 
@@ -69,8 +68,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/superadmin/:path*',
-    '/admin/:path*',
-    '/api/superadmin/:path*',
-    '/api/admin/:path*'
+    '/admin/:path*'
   ],
 };

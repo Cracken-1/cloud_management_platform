@@ -5,21 +5,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { 
-  ShieldCheckIcon, 
+  UserIcon, 
   LockClosedIcon, 
-  UserIcon,
   EyeIcon,
   EyeSlashIcon,
-  ExclamationCircleIcon
+  ExclamationCircleIcon,
+  CloudIcon
 } from '@heroicons/react/24/outline';
 
-const AUTHORIZED_SUPERADMIN_EMAILS = [
-  'admin@infinitystack.com',
-  'superadmin@infinitystack.com',
-  'alphoncewekesamukaisi@gmail.com'
-];
-
-export default function SuperadminLogin() {
+export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,13 +27,6 @@ export default function SuperadminLogin() {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    // Check authorization
-    if (!AUTHORIZED_SUPERADMIN_EMAILS.includes(email.toLowerCase())) {
-      setError('Access denied. This email is not authorized for platform administration.');
-      setLoading(false);
-      return;
-    }
 
     try {
       const { data, error: authError } = await supabase.auth.signInWithPassword({
@@ -56,17 +43,29 @@ export default function SuperadminLogin() {
         // Check user profile
         const { data: profile } = await supabase
           .from('users')
-          .select('role, status')
+          .select('role, status, organization_id')
           .eq('id', data.user.id)
           .single();
 
-        if (!profile || profile.role !== 'SUPERADMIN' || profile.status !== 'active') {
+        if (!profile) {
           await supabase.auth.signOut();
-          setError('Access denied. Superadmin privileges required.');
+          setError('User profile not found. Please contact support.');
           return;
         }
 
-        router.push('/superadmin/dashboard');
+        if (profile.status !== 'active') {
+          await supabase.auth.signOut();
+          setError('Account is inactive. Please contact your administrator.');
+          return;
+        }
+
+        if (!['ORG_ADMIN', 'USER'].includes(profile.role)) {
+          await supabase.auth.signOut();
+          setError('Invalid access level for this portal.');
+          return;
+        }
+
+        router.push('/admin/dashboard');
       }
     } catch (error) {
       setError('Authentication failed. Please try again.');
@@ -76,27 +75,19 @@ export default function SuperadminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-900 via-gray-900 to-black flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-slate-900 to-gray-900 flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="mx-auto h-16 w-16 bg-red-600 rounded-full flex items-center justify-center mb-6">
-            <ShieldCheckIcon className="h-8 w-8 text-white" />
+          <div className="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-6">
+            <CloudIcon className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Platform Administration</h1>
-          <p className="text-red-200">Restricted Access - Authorized Personnel Only</p>
-        </div>
-
-        {/* Warning */}
-        <div className="bg-red-900/30 border border-red-600/50 rounded-lg p-4 mb-6">
-          <div className="flex items-center">
-            <LockClosedIcon className="h-5 w-5 text-red-400 mr-2" />
-            <p className="text-sm text-red-200">All activities are monitored and logged</p>
-          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
+          <p className="text-blue-200">Access your organization dashboard</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700">
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-900/30 border border-red-600/50 rounded-lg p-4">
@@ -108,22 +99,22 @@ export default function SuperadminLogin() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 <UserIcon className="w-4 h-4 inline mr-1" />
-                Administrator Email
+                Email Address
               </label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
-                placeholder="Enter your authorized email"
+                className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your email"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-white mb-2">
                 <LockClosedIcon className="w-4 h-4 inline mr-1" />
                 Password
               </label>
@@ -133,7 +124,7 @@ export default function SuperadminLogin() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 pr-10 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-full px-3 py-2 pr-10 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter your password"
                 />
                 <button
@@ -142,9 +133,9 @@ export default function SuperadminLogin() {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
                   {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-400" />
+                    <EyeSlashIcon className="h-5 w-5 text-white/60" />
                   ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-400" />
+                    <EyeIcon className="h-5 w-5 text-white/60" />
                   )}
                 </button>
               </div>
@@ -153,16 +144,24 @@ export default function SuperadminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-3 px-4 rounded-lg font-medium transition-colors"
             >
-              {loading ? 'Authenticating...' : 'Access Platform'}
+              {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <Link href="/" className="text-gray-400 hover:text-white text-sm">
-              ← Back to Homepage
-            </Link>
+          <div className="mt-6 space-y-4">
+            <div className="text-center">
+              <Link href="/access/request" className="text-blue-300 hover:text-blue-200 text-sm">
+                Don't have access? Request an account
+              </Link>
+            </div>
+            
+            <div className="border-t border-white/20 pt-4 text-center">
+              <Link href="/" className="text-white/70 hover:text-white text-sm">
+                ← Back to Homepage
+              </Link>
+            </div>
           </div>
         </div>
       </div>
