@@ -231,7 +231,7 @@ export class MPesaService {
         .from('mpesa_transactions')
         .select('*')
         .eq('checkout_request_id', checkoutRequestId)
-        .eq('tenant_id', tenantId)
+        .eq('tenant_id', _tenantId)
         .single();
 
       if (error || !transaction) {
