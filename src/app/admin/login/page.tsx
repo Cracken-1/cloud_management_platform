@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { 
   UserIcon, 
@@ -10,8 +11,26 @@ import {
   EyeIcon,
   EyeSlashIcon,
   ExclamationCircleIcon,
-  CloudIcon
+  CloudIcon,
+  ArrowLeftIcon
 } from '@heroicons/react/24/outline';
+import LoadingSpinner from '@/components/ui/loading-spinner';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -40,7 +59,6 @@ export default function AdminLogin() {
       }
 
       if (data.user) {
-        // Check user profile
         const { data: profile } = await supabase
           .from('users')
           .select('role, status, organization_id')
@@ -75,96 +93,179 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-slate-900 to-gray-900 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center py-12 px-4 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0">
+        <motion.div 
+          className="absolute top-20 left-20 w-32 h-32 bg-emerald-200/30 rounded-full blur-xl"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            x: [0, 50, 0],
+            y: [0, -30, 0]
+          }}
+          transition={{ 
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-20 right-20 w-40 h-40 bg-teal-200/30 rounded-full blur-xl"
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            x: [0, -40, 0],
+            y: [0, 20, 0]
+          }}
+          transition={{ 
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/4 w-24 h-24 bg-cyan-200/20 rounded-full blur-lg"
+          animate={{ 
+            rotate: [0, 360],
+            scale: [1, 1.3, 1]
+          }}
+          transition={{ 
+            duration: 12,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      </div>
+
+      <motion.div 
+        className="max-w-md w-full relative z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-6">
-            <CloudIcon className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Admin Portal</h1>
-          <p className="text-blue-200">Access your organization dashboard</p>
-        </div>
+        <motion.div 
+          className="text-center mb-8"
+          variants={itemVariants}
+        >
+          <motion.div 
+            className="mx-auto h-20 w-20 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6 shadow-2xl"
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <CloudIcon className="h-10 w-10 text-white" />
+          </motion.div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+            Admin Portal
+          </h1>
+          <p className="text-gray-600">Access your organization dashboard</p>
+        </motion.div>
 
         {/* Login Form */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
+        <motion.div 
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50"
+          variants={itemVariants}
+          whileHover={{ y: -5 }}
+        >
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="bg-red-900/30 border border-red-600/50 rounded-lg p-4">
+              <motion.div 
+                className="bg-red-50 border border-red-200 rounded-xl p-4"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
                 <div className="flex items-center">
-                  <ExclamationCircleIcon className="h-5 w-5 text-red-400 mr-3" />
-                  <p className="text-sm text-red-200">{error}</p>
+                  <ExclamationCircleIcon className="h-5 w-5 text-red-500 mr-3" />
+                  <p className="text-sm text-red-700">{error}</p>
                 </div>
-              </div>
+              </motion.div>
             )}
 
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                <UserIcon className="w-4 h-4 inline mr-1" />
+            <motion.div variants={itemVariants}>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <UserIcon className="w-4 h-4 inline mr-2" />
                 Email Address
               </label>
-              <input
+              <motion.input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 bg-white/70 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                 placeholder="Enter your email"
+                whileFocus={{ scale: 1.02 }}
               />
-            </div>
+            </motion.div>
 
-            <div>
-              <label className="block text-sm font-medium text-white mb-2">
-                <LockClosedIcon className="w-4 h-4 inline mr-1" />
+            <motion.div variants={itemVariants}>
+              <label className="block text-sm font-semibold text-gray-700 mb-3">
+                <LockClosedIcon className="w-4 h-4 inline mr-2" />
                 Password
               </label>
               <div className="relative">
-                <input
+                <motion.input
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3 py-2 pr-10 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 pr-12 bg-white/70 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
                   placeholder="Enter your password"
+                  whileFocus={{ scale: 1.02 }}
                 />
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                 >
                   {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-white/60" />
+                    <EyeSlashIcon className="h-5 w-5 text-gray-400" />
                   ) : (
-                    <EyeIcon className="h-5 w-5 text-white/60" />
+                    <EyeIcon className="h-5 w-5 text-gray-400" />
                   )}
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
 
-            <button
+            <motion.button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50 text-white py-4 px-6 rounded-xl font-semibold shadow-lg transition-all flex items-center justify-center"
+              variants={itemVariants}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
+              {loading ? (
+                <LoadingSpinner size="sm" className="mr-2" />
+              ) : null}
               {loading ? 'Signing in...' : 'Sign In'}
-            </button>
+            </motion.button>
           </form>
 
-          <div className="mt-6 space-y-4">
+          <motion.div 
+            className="mt-8 space-y-4"
+            variants={itemVariants}
+          >
             <div className="text-center">
-              <Link href="/access/request" className="text-blue-300 hover:text-blue-200 text-sm">
-                Don&apos;t have access? Request an account
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link href="/access/request" className="text-emerald-600 hover:text-emerald-700 text-sm font-medium">
+                  Don&apos;t have access? Request an account
+                </Link>
+              </motion.div>
             </div>
             
-            <div className="border-t border-white/20 pt-4 text-center">
-              <Link href="/" className="text-white/70 hover:text-white text-sm">
-                ← Back to Homepage
-              </Link>
+            <div className="border-t border-gray-200 pt-4 text-center">
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm flex items-center justify-center">
+                  <ArrowLeftIcon className="h-4 w-4 mr-1" />
+                  Back to Homepage
+                </Link>
+              </motion.div>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
