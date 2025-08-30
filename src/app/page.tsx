@@ -6,8 +6,7 @@ import {
   UsersIcon,
   ServerIcon,
   CpuChipIcon,
-  ArrowRightIcon,
-  CheckIcon
+  ArrowRightIcon
 } from '@heroicons/react/24/outline';
 
 export default function HomePage() {

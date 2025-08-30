@@ -83,7 +83,7 @@ export default function AccessRequest() {
       }
 
       setSuccess(true);
-    } catch (error) {
+    } catch {
       setError('Failed to submit request. Please try again.');
     } finally {
       setLoading(false);

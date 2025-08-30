@@ -30,7 +30,7 @@ export async function middleware(request: NextRequest) {
       if (!profile || profile.role !== 'SUPERADMIN' || profile.status !== 'active') {
         return NextResponse.redirect(new URL('/superadmin/login', request.url));
       }
-    } catch (error) {
+    } catch {
       return NextResponse.redirect(new URL('/superadmin/login', request.url));
     }
   }
@@ -57,7 +57,7 @@ export async function middleware(request: NextRequest) {
       if (!profile || !['ORG_ADMIN', 'USER', 'SUPERADMIN'].includes(profile.role) || profile.status !== 'active') {
         return NextResponse.redirect(new URL('/admin/login', request.url));
       }
-    } catch (error) {
+    } catch {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
   }

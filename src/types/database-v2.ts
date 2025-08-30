@@ -13,8 +13,8 @@ export interface Database {
           user_limit: number;
           storage_limit_gb: number;
           api_calls_limit: number;
-          settings: Record<string, any>;
-          branding: Record<string, any>;
+          settings: Record<string, unknown>;
+          branding: Record<string, unknown>;
           created_at: string;
           updated_at: string;
           created_by: string | null;
@@ -30,8 +30,8 @@ export interface Database {
           user_limit?: number;
           storage_limit_gb?: number;
           api_calls_limit?: number;
-          settings?: Record<string, any>;
-          branding?: Record<string, any>;
+          settings?: Record<string, unknown>;
+          branding?: Record<string, unknown>;
           created_at?: string;
           updated_at?: string;
           created_by?: string | null;
@@ -47,8 +47,8 @@ export interface Database {
           user_limit?: number;
           storage_limit_gb?: number;
           api_calls_limit?: number;
-          settings?: Record<string, any>;
-          branding?: Record<string, any>;
+          settings?: Record<string, unknown>;
+          branding?: Record<string, unknown>;
           created_at?: string;
           updated_at?: string;
           created_by?: string | null;
@@ -71,7 +71,7 @@ export interface Database {
           email_verified_at: string | null;
           timezone: string;
           language: string;
-          preferences: Record<string, any>;
+          preferences: Record<string, unknown>;
           created_at: string;
           updated_at: string;
           last_login_at: string | null;
@@ -93,7 +93,7 @@ export interface Database {
           email_verified_at?: string | null;
           timezone?: string;
           language?: string;
-          preferences?: Record<string, any>;
+          preferences?: Record<string, unknown>;
           created_at?: string;
           updated_at?: string;
           last_login_at?: string | null;
@@ -115,7 +115,7 @@ export interface Database {
           email_verified_at?: string | null;
           timezone?: string;
           language?: string;
-          preferences?: Record<string, any>;
+          preferences?: Record<string, unknown>;
           created_at?: string;
           updated_at?: string;
           last_login_at?: string | null;
@@ -161,7 +161,7 @@ export interface Database {
           assigned_plan: string | null;
           source: string | null;
           referral_code: string | null;
-          metadata: Record<string, any>;
+          metadata: Record<string, unknown>;
           created_at: string;
           updated_at: string;
         };
@@ -203,7 +203,7 @@ export interface Database {
           assigned_plan?: string | null;
           source?: string | null;
           referral_code?: string | null;
-          metadata?: Record<string, any>;
+          metadata?: Record<string, unknown>;
           created_at?: string;
           updated_at?: string;
         };
@@ -245,7 +245,7 @@ export interface Database {
           assigned_plan?: string | null;
           source?: string | null;
           referral_code?: string | null;
-          metadata?: Record<string, any>;
+          metadata?: Record<string, unknown>;
           created_at?: string;
           updated_at?: string;
         };

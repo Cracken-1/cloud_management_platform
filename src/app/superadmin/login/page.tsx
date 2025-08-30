@@ -68,7 +68,7 @@ export default function SuperadminLogin() {
 
         router.push('/superadmin/dashboard');
       }
-    } catch (error) {
+    } catch {
       setError('Authentication failed. Please try again.');
     } finally {
       setLoading(false);

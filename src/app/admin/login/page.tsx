@@ -67,7 +67,7 @@ export default function AdminLogin() {
 
         router.push('/admin/dashboard');
       }
-    } catch (error) {
+    } catch {
       setError('Authentication failed. Please try again.');
     } finally {
       setLoading(false);
@@ -153,7 +153,7 @@ export default function AdminLogin() {
           <div className="mt-6 space-y-4">
             <div className="text-center">
               <Link href="/access/request" className="text-blue-300 hover:text-blue-200 text-sm">
-                Don't have access? Request an account
+                Don&apos;t have access? Request an account
               </Link>
             </div>
             
