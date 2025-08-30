@@ -11,10 +11,7 @@ import {
   CpuChipIcon,
   ArrowRightIcon,
   GlobeAltIcon,
-  LockClosedIcon,
   BoltIcon,
-  CogIcon,
-  CheckCircleIcon,
   StarIcon
 } from '@heroicons/react/24/outline';
 
