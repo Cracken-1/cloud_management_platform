@@ -72,11 +72,17 @@ export default function LoginForm() {
 
       if (data.user) {
         // Get user profile to determine redirect
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from('user_profiles')
           .select('role, is_active')
           .eq('id', data.user.id)
           .single();
+
+        if (profileError) {
+          setError('Failed to verify user profile. Please try again.');
+          await supabase.auth.signOut();
+          return;
+        }
 
         if (!profile) {
           setError('User profile not found. Please contact support.');
@@ -292,7 +298,8 @@ export default function LoginForm() {
                 Platform Administrator?{' '}
                 <Link
                   href="/superadmin/login"
-                  className="text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                  prefetch={false}
                 >
                   Superadmin Login
                 </Link>

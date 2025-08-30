@@ -89,27 +89,37 @@ export default function SuperadminLogin() {
 
       if (data.user) {
         // Get user profile to verify superadmin role
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from('user_profiles')
           .select('role, is_active')
           .eq('id', data.user.id)
           .single();
 
+        if (profileError) {
+          setError('Failed to verify user profile. Please try again.');
+          await supabase.auth.signOut();
+          setLoading(false);
+          return;
+        }
+
         if (!profile) {
           setError('User profile not found. Please contact support.');
           await supabase.auth.signOut();
+          setLoading(false);
           return;
         }
 
         if (!profile.is_active) {
           setError('Your account has been deactivated. Please contact support.');
           await supabase.auth.signOut();
+          setLoading(false);
           return;
         }
 
         if (profile.role !== 'SUPERADMIN') {
           setError('Access denied. This portal is for superadministrators only.');
           await supabase.auth.signOut();
+          setLoading(false);
           return;
         }
 

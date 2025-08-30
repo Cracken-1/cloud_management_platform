@@ -64,7 +64,7 @@ CREATE TABLE user_profiles (
     email VARCHAR(255) UNIQUE NOT NULL,
     first_name VARCHAR(100),
     last_name VARCHAR(100),
-    full_name VARCHAR(200) GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED,
+
     role VARCHAR(50) NOT NULL DEFAULT 'ADMIN',
     
     -- Profile information

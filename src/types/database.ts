@@ -1,3 +1,47 @@
+// Specific interfaces for structured data
+export interface TenantBranding {
+  logo_url?: string;
+  primary_color?: string;
+  secondary_color?: string;
+  theme?: 'light' | 'dark';
+}
+
+export interface TenantFeatures {
+  analytics?: boolean;
+  api_access?: boolean;
+  custom_domains?: boolean;
+  sso?: boolean;
+}
+
+export interface TenantSettings {
+  timezone?: string;
+  date_format?: string;
+  currency?: string;
+  notifications?: boolean;
+}
+
+export interface UserPermissions {
+  read?: boolean;
+  write?: boolean;
+  delete?: boolean;
+  admin?: boolean;
+}
+
+export interface UserPreferences {
+  theme?: 'light' | 'dark';
+  language?: string;
+  notifications?: boolean;
+  dashboard_layout?: string;
+}
+
+export interface BillingAddress {
+  street?: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  country?: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -12,12 +56,12 @@ export interface Database {
           status: string;
           created_at: string;
           updated_at: string;
-          branding: Record<string, unknown>;
-          features: Record<string, unknown>;
+          branding: TenantBranding;
+          features: TenantFeatures;
           dashboard_layout: string;
-          settings: Record<string, unknown>;
+          settings: TenantSettings;
           billing_email: string | null;
-          billing_address: Record<string, unknown> | null;
+          billing_address: BillingAddress | null;
           user_limit: number;
           storage_limit_gb: number;
           api_calls_limit: number;
@@ -32,12 +76,12 @@ export interface Database {
           status?: string;
           created_at?: string;
           updated_at?: string;
-          branding?: Record<string, unknown>;
-          features?: Record<string, unknown>;
+          branding?: TenantBranding;
+          features?: TenantFeatures;
           dashboard_layout?: string;
-          settings?: Record<string, unknown>;
+          settings?: TenantSettings;
           billing_email?: string | null;
-          billing_address?: Record<string, unknown> | null;
+          billing_address?: BillingAddress | null;
           user_limit?: number;
           storage_limit_gb?: number;
           api_calls_limit?: number;
@@ -52,12 +96,12 @@ export interface Database {
           status?: string;
           created_at?: string;
           updated_at?: string;
-          branding?: Record<string, unknown>;
-          features?: Record<string, unknown>;
+          branding?: TenantBranding;
+          features?: TenantFeatures;
           dashboard_layout?: string;
-          settings?: Record<string, unknown>;
+          settings?: TenantSettings;
           billing_email?: string | null;
-          billing_address?: Record<string, unknown> | null;
+          billing_address?: BillingAddress | null;
           user_limit?: number;
           storage_limit_gb?: number;
           api_calls_limit?: number;
@@ -69,7 +113,6 @@ export interface Database {
           email: string;
           first_name: string | null;
           last_name: string | null;
-          full_name: string | null;
           role: string;
           avatar_url: string | null;
           phone_number: string | null;
@@ -82,8 +125,8 @@ export interface Database {
           updated_at: string;
           created_by: string | null;
           last_login_at: string | null;
-          permissions: Record<string, unknown>;
-          preferences: Record<string, unknown>;
+          permissions: UserPermissions;
+          preferences: UserPreferences;
         };
         Insert: {
           id: string;
@@ -102,8 +145,8 @@ export interface Database {
           updated_at?: string;
           created_by?: string | null;
           last_login_at?: string | null;
-          permissions?: Record<string, unknown>;
-          preferences?: Record<string, unknown>;
+          permissions?: UserPermissions;
+          preferences?: UserPreferences;
         };
         Update: {
           id?: string;
@@ -122,8 +165,8 @@ export interface Database {
           updated_at?: string;
           created_by?: string | null;
           last_login_at?: string | null;
-          permissions?: Record<string, unknown>;
-          preferences?: Record<string, unknown>;
+          permissions?: UserPermissions;
+          preferences?: UserPreferences;
         };
       };
       user_tenant_roles: {
@@ -132,7 +175,7 @@ export interface Database {
           user_id: string;
           tenant_id: string;
           role: string;
-          permissions: Record<string, unknown>;
+          permissions: UserPermissions;
           granted_by: string | null;
           granted_at: string;
           revoked_at: string | null;
@@ -143,7 +186,7 @@ export interface Database {
           user_id: string;
           tenant_id: string;
           role?: string;
-          permissions?: Record<string, unknown>;
+          permissions?: UserPermissions;
           granted_by?: string | null;
           granted_at?: string;
           revoked_at?: string | null;
@@ -154,7 +197,7 @@ export interface Database {
           user_id?: string;
           tenant_id?: string;
           role?: string;
-          permissions?: Record<string, unknown>;
+          permissions?: UserPermissions;
           granted_by?: string | null;
           granted_at?: string;
           revoked_at?: string | null;

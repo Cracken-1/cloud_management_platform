@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 
 import { supabase } from '@/lib/database/supabase';
 import { User as AppUser, authService } from './auth-service';
@@ -18,24 +18,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     try {
       const currentUser = await authService.getCurrentUser();
-      setUser(currentUser);
+      // Sanitize user data to prevent XSS
+      if (currentUser) {
+        const sanitizedUser = {
+          ...currentUser,
+          email: currentUser.email?.replace(/[<>"'&]/g, ''),
+          firstName: currentUser.firstName?.replace(/[<>"'&]/g, ''),
+          lastName: currentUser.lastName?.replace(/[<>"'&]/g, '')
+        };
+        setUser(sanitizedUser);
+      } else {
+        setUser(null);
+      }
     } catch (error) {
       console.error('Error refreshing user:', error);
       setUser(null);
     }
-  };
+  }, []);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     try {
       await authService.logout();
       setUser(null);
     } catch (error) {
       console.error('Error signing out:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Get initial session
@@ -65,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [refreshUser]);
 
   const value = {
     user,
