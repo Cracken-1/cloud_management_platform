@@ -13,14 +13,14 @@ export async function middleware(request: NextRequest) {
 
   // Protect superadmin routes
   if (request.nextUrl.pathname.startsWith('/superadmin')) {
-    // Allow registration page if no superadmin exists
-    if (request.nextUrl.pathname === '/superadmin/register') {
+    // Allow login and registration pages without authentication
+    if (request.nextUrl.pathname === '/superadmin/login' || request.nextUrl.pathname === '/superadmin/register') {
       return res;
     }
 
     // Require authentication for other superadmin routes
     if (!session) {
-      return NextResponse.redirect(new URL('/auth/login', request.url));
+      return NextResponse.redirect(new URL('/superadmin/login', request.url));
     }
 
     // Check if user has superadmin role
