@@ -7,7 +7,7 @@ export default function TermsOfService() {
         {/* Header */}
         <div className="text-center mb-12">
           <Link href="/" className="inline-flex items-center mb-8 text-blue-600 hover:text-blue-700">
-            <img src="/logo.png" alt="InfinityStack" className="h-8 w-8 mr-3" />
+            <div className="h-8 w-8 bg-blue-600 rounded mr-3 flex items-center justify-center text-white font-bold text-sm">IS</div>
             <span className="text-xl font-bold">InfinityStack</span>
           </Link>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Terms of Service</h1>
@@ -18,7 +18,7 @@ export default function TermsOfService() {
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 prose prose-lg max-w-none">
           <h2>1. Acceptance of Terms</h2>
           <p>
-            By accessing and using InfinityStack&apos;s services, you accept and agree to be bound by the terms and provision 
+            By accessing and using InfinityStack&rsquo;s services, you accept and agree to be bound by the terms and provision 
             of this agreement. If you do not agree to abide by the above, please do not use this service.
           </p>
 
@@ -80,7 +80,7 @@ export default function TermsOfService() {
           <ul>
             <li>Subscription fees are billed in advance on a monthly or annual basis</li>
             <li>All fees are non-refundable unless otherwise specified</li>
-            <li>We may change our pricing with 30 days&apos; notice</li>
+            <li>We may change our pricing with 30 days&rsquo; notice</li>
           </ul>
 
           <h3>8.2 Payment Processing</h3>

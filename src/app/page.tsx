@@ -333,7 +333,7 @@ export default function HomePage() {
                     <StarIcon key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-white/90 mb-6 italic">"{testimonial.quote}"</p>
+                <p className="text-white/90 mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
                 <div>
                   <div className="font-semibold text-white">{testimonial.author}</div>
                   <div className="text-white/70 text-sm">{testimonial.role}</div>

@@ -176,7 +176,7 @@ export class MPesaService {
     return transaction;
   }
 
-  async queryTransactionStatus(tenantId: string, transactionId: string): Promise<{ success: boolean; data?: Record<string, unknown>; error?: string }> {
+  async queryTransactionStatus(_tenantId: string, transactionId: string): Promise<{ success: boolean; data?: Record<string, unknown>; error?: string }> {
     try {
       const accessToken = await this.getAccessToken();
       const timestamp = this.generateTimestamp();
@@ -212,7 +212,7 @@ export class MPesaService {
     }
   }
 
-  async handleCallback(callbackData: Record<string, unknown>, tenantId: string): Promise<void> {
+  async handleCallback(callbackData: Record<string, unknown>, _tenantId: string): Promise<void> {
     try {
       const body = callbackData.Body as Record<string, unknown>;
       const stkCallback = body?.stkCallback as Record<string, unknown>;
@@ -389,7 +389,7 @@ export class MPesaService {
     return (dailyTotal + amount) <= DAILY_LIMIT;
   }
 
-  async suggestOptimalPaymentTiming(_amount: number): Promise<string> {
+  async suggestOptimalPaymentTiming(): Promise<string> {
     // Suggest best times for M-Pesa transactions based on network load
     const hour = new Date().getHours();
 

@@ -7,7 +7,7 @@ export default function PrivacyPolicy() {
         {/* Header */}
         <div className="text-center mb-12">
           <Link href="/" className="inline-flex items-center mb-8 text-blue-600 hover:text-blue-700">
-            <img src="/logo.png" alt="InfinityStack" className="h-8 w-8 mr-3" />
+            <div className="h-8 w-8 bg-blue-600 rounded mr-3 flex items-center justify-center text-white font-bold text-sm">IS</div>
             <span className="text-xl font-bold">InfinityStack</span>
           </Link>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
@@ -104,7 +104,7 @@ export default function PrivacyPolicy() {
           <h2>9. Changes to This Policy</h2>
           <p>
             We may update this privacy policy from time to time. We will notify you of any changes by posting the new 
-            policy on this page and updating the &quot;Last updated&quot; date.
+            policy on this page and updating the &ldquo;Last updated&rdquo; date.
           </p>
 
           <h2>10. Contact Us</h2>
