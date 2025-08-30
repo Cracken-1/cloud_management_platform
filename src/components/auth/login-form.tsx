@@ -40,7 +40,6 @@ export default function LoginForm() {
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
-            hd: 'infinitystack.com', // Optional: restrict to your domain
           },
           scopes: 'openid email profile'
         }
