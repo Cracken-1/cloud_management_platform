@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { 
   EyeIcon, 
@@ -14,6 +15,7 @@ import {
   ShieldCheckIcon,
   ChartBarIcon
 } from '@heroicons/react/24/outline';
+import LoadingSpinner from '@/components/ui/loading-spinner';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -38,7 +40,9 @@ export default function LoginForm() {
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
-          }
+            hd: 'infinitystack.com', // Optional: restrict to your domain
+          },
+          scopes: 'openid email profile'
         }
       });
       
@@ -147,7 +151,7 @@ export default function LoginForm() {
               className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
             >
               {googleLoading ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-600 mr-2"></div>
+                <LoadingSpinner size="sm" className="mr-2" />
               ) : (
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -242,12 +246,12 @@ export default function LoginForm() {
               </div>
 
               <div className="text-sm">
-                <a
+                <Link
                   href="/auth/forgot-password"
                   className="text-blue-600 hover:text-blue-700"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -259,7 +263,7 @@ export default function LoginForm() {
               >
                 {loading ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    <LoadingSpinner size="sm" className="mr-2" />
                     Signing in...
                   </>
                 ) : (
@@ -277,21 +281,21 @@ export default function LoginForm() {
             <div className="border-t border-gray-200 pt-4">
               <p className="text-center text-sm text-gray-600">
                 Don&apos;t have an account?{' '}
-                <a
+                <Link
                   href="/auth/request-access"
                   className="text-blue-600 hover:text-blue-700 font-medium"
                 >
                   Request Access
-                </a>
+                </Link>
               </p>
               <p className="text-center text-sm text-gray-600 mt-2">
                 Platform Administrator?{' '}
-                <a
+                <Link
                   href="/superadmin/login"
                   className="text-blue-600 hover:text-blue-700 font-medium"
                 >
                   Superadmin Login
-                </a>
+                </Link>
               </p>
             </div>
           </div>

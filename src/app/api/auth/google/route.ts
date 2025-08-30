@@ -38,7 +38,43 @@ export async function GET(request: NextRequest) {
       .eq('id', data.user.id)
       .single();
 
-    if (!profile || !profile.is_active) {
+    // Handle superadmin login specifically
+    if (isFromSuperadminLogin) {
+      if (!profile || profile.role !== 'SUPERADMIN') {
+        await supabase.auth.signOut();
+        return NextResponse.redirect(new URL('/superadmin/login?error=unauthorized', request.url));
+      }
+      if (!profile.is_active) {
+        await supabase.auth.signOut();
+        return NextResponse.redirect(new URL('/superadmin/login?error=inactive', request.url));
+      }
+      return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
+    }
+
+    // For regular login, create profile if it doesn't exist
+    if (!profile) {
+      // Create a basic user profile for new users
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .insert({
+          id: data.user.id,
+          email: data.user.email,
+          full_name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
+          role: 'CUSTOMER',
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        });
+
+      if (profileError) {
+        console.error('Profile creation error:', profileError);
+      }
+      
+      // Redirect new users to admin (they'll need proper role assignment)
+      return NextResponse.redirect(new URL('/admin', request.url));
+    }
+
+    if (!profile.is_active) {
       await supabase.auth.signOut();
       return NextResponse.redirect(new URL('/auth/error?message=inactive', request.url));
     }

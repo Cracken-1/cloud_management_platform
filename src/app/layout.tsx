@@ -9,7 +9,12 @@ export const metadata: Metadata = {
   title: 'InfinityStack - Enterprise Cloud Platform',
   description: 'Scalable, secure, and intelligent cloud management platform designed for enterprise operations. Multi-tenant architecture with advanced analytics and enterprise-grade security.',
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/logo.png', sizes: '192x192', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/logo.png',
   },
 };
 

@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import { 
   CloudIcon,
   ShieldCheckIcon,
@@ -48,52 +49,120 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-20 overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 rounded-full opacity-20"
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 180, 360],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+          <motion.div
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-100 rounded-full opacity-20"
+            animate={{
+              scale: [1.2, 1, 1.2],
+              rotate: [360, 180, 0],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+            <motion.h1 
+              className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
               Enterprise Cloud
-              <span className="text-blue-600 block">Infrastructure</span>
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+              <motion.span 
+                className="text-blue-600 block"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+              >
+                Infrastructure
+              </motion.span>
+            </motion.h1>
+            
+            <motion.p 
+              className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+            >
               Scalable, secure, and intelligent cloud management platform designed for enterprise operations. 
               Multi-tenant architecture with advanced analytics, AI-powered insights, and enterprise-grade security.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link
-                href="/auth/request-access"
-                className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold inline-flex items-center justify-center"
+            </motion.p>
+            
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Get Started
-                <ArrowRightIcon className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                href="#features"
-                className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-colors text-lg font-semibold"
+                <Link
+                  href="/auth/request-access"
+                  className="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold inline-flex items-center justify-center"
+                >
+                  Get Started
+                  <ArrowRightIcon className="ml-2 h-5 w-5" />
+                </Link>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Learn More
-              </Link>
-            </div>
+                <Link
+                  href="#features"
+                  className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-colors text-lg font-semibold"
+                >
+                  Learn More
+                </Link>
+              </motion.div>
+            </motion.div>
             
             {/* Trust Indicators */}
-            <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-500">
-              <div className="flex items-center">
-                <ShieldCheckIcon className="h-5 w-5 text-green-600 mr-2" />
-                <span>Enterprise Security</span>
-              </div>
-              <div className="flex items-center">
-                <CloudIcon className="h-5 w-5 text-blue-600 mr-2" />
-                <span>99.9% Uptime SLA</span>
-              </div>
-              <div className="flex items-center">
-                <LockClosedIcon className="h-5 w-5 text-purple-600 mr-2" />
-                <span>SOC 2 Compliant</span>
-              </div>
-              <div className="flex items-center">
-                <GlobeAltIcon className="h-5 w-5 text-indigo-600 mr-2" />
-                <span>Global Infrastructure</span>
-              </div>
-            </div>
+            <motion.div 
+              className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-500"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 1, ease: "easeOut" }}
+            >
+              {[
+                { icon: ShieldCheckIcon, text: "Enterprise Security", color: "text-green-600" },
+                { icon: CloudIcon, text: "99.9% Uptime SLA", color: "text-blue-600" },
+                { icon: LockClosedIcon, text: "SOC 2 Compliant", color: "text-purple-600" },
+                { icon: GlobeAltIcon, text: "Global Infrastructure", color: "text-indigo-600" }
+              ].map((item, index) => (
+                <motion.div 
+                  key={index}
+                  className="flex items-center"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
+                >
+                  <item.icon className={`h-5 w-5 ${item.color} mr-2`} />
+                  <span>{item.text}</span>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
@@ -101,7 +170,13 @@ export default function Home() {
       {/* Features Section */}
       <section id="features" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Enterprise-Grade Platform Features
             </h2>
@@ -109,14 +184,25 @@ export default function Home() {
               Built for scale, security, and performance. Our platform provides everything you need 
               to manage complex enterprise operations with confidence.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Multi-Tenant Architecture */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+            <motion.div 
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-6"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <BuildingOfficeIcon className="h-7 w-7 text-blue-600" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Multi-Tenant Architecture
               </h3>
@@ -124,13 +210,24 @@ export default function Home() {
                 Scalable multi-tenant infrastructure with complete data isolation, 
                 custom branding, and flexible subscription management for enterprise clients.
               </p>
-            </div>
+            </motion.div>
 
             {/* Advanced Security */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+            <motion.div 
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center mb-6"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <ShieldCheckIcon className="h-7 w-7 text-green-600" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Enterprise Security
               </h3>
@@ -138,13 +235,24 @@ export default function Home() {
                 SOC 2 compliant infrastructure with end-to-end encryption, 
                 role-based access control, and comprehensive audit logging.
               </p>
-            </div>
+            </motion.div>
 
             {/* Cloud Infrastructure */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+            <motion.div 
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <CloudIcon className="h-7 w-7 text-purple-600" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Global Cloud Infrastructure
               </h3>
@@ -152,13 +260,24 @@ export default function Home() {
                 Distributed cloud architecture with automatic scaling, 
                 global CDN, and 99.9% uptime SLA for mission-critical operations.
               </p>
-            </div>
+            </motion.div>
 
             {/* AI & Analytics */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center mb-6">
+            <motion.div 
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center mb-6"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <CpuChipIcon className="h-7 w-7 text-indigo-600" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 AI-Powered Analytics
               </h3>
@@ -166,13 +285,24 @@ export default function Home() {
                 Machine learning algorithms for predictive analytics, 
                 automated insights, and intelligent decision support systems.
               </p>
-            </div>
+            </motion.div>
 
             {/* Real-time Monitoring */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
+            <motion.div 
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-14 h-14 bg-orange-100 rounded-xl flex items-center justify-center mb-6"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <ChartBarIcon className="h-7 w-7 text-orange-600" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Real-time Monitoring
               </h3>
@@ -180,13 +310,24 @@ export default function Home() {
                 Comprehensive monitoring dashboards with real-time metrics, 
                 alerting systems, and performance optimization recommendations.
               </p>
-            </div>
+            </motion.div>
 
             {/* User Management */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow">
-              <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-6">
+            <motion.div 
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-6"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                transition={{ duration: 0.2 }}
+              >
                 <UsersIcon className="h-7 w-7 text-red-600" />
-              </div>
+              </motion.div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Advanced User Management
               </h3>
@@ -194,7 +335,7 @@ export default function Home() {
                 Sophisticated user management with SSO integration, 
                 granular permissions, and automated provisioning workflows.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -332,12 +473,12 @@ export default function Home() {
             </div>
             
             <div>
-              <h4 className="text-lg font-semibold mb-4">Support</h4>
+              <h4 className="text-lg font-semibold mb-4">Legal & Support</h4>
               <ul className="space-y-2 text-gray-400">
+                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
                 <li><Link href="/support" className="hover:text-white transition-colors">Help Center</Link></li>
                 <li><Link href="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                <li><Link href="/status" className="hover:text-white transition-colors">System Status</Link></li>
-                <li><Link href="/security" className="hover:text-white transition-colors">Security</Link></li>
               </ul>
             </div>
           </div>
