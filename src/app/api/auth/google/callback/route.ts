@@ -53,14 +53,15 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        // Redirect based on role and source
-        if (from === 'superadmin' && isAuthorizedSuperadmin(email)) {
-          return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
-        } else if (isAuthorizedSuperadmin(email)) {
-          return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
-        } else {
-          return NextResponse.redirect(new URL('/admin', request.url));
+        // Check if user is authorized superadmin
+        if (!isAuthorizedSuperadmin(email)) {
+          // Sign out unauthorized user
+          await supabase.auth.signOut();
+          return NextResponse.redirect(new URL('/superadmin/login?error=unauthorized', request.url));
         }
+
+        // Redirect superadmin to dashboard
+        return NextResponse.redirect(new URL('/superadmin/dashboard', request.url));
       }
     } catch (error) {
       console.error('Callback error:', error);
